@@ -1,6 +1,9 @@
 package ru.rishat.entity;
 
+import java.util.logging.Logger;
+
 public class Position {
+    private static final Logger logger = Logger.getLogger(Position.class.getName());
     private long purchaseID;
     private long positionID;
     private long resellerID;
