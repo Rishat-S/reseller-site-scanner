@@ -15,6 +15,20 @@ public class Position {
     private String photoName;
     private int percent;
 
+    public long getIntermediatePrice() {
+        long result;
+        double percentAmount = this.getPercent() * this.getProductPurchasePrise() / 100.;
+        result = (long) (Math.ceil((this.getProductPurchasePrise() + percentAmount) / 10.) * 10);
+        return result;
+    }
+
+    public long getPrice() {
+        long result;
+        double percentAmount = 10 * this.getIntermediatePrice() / 100.;
+        result = (long) (Math.ceil((this.getIntermediatePrice() + percentAmount) / 10.) * 10);
+        return result;
+    }
+
     public long getPurchaseID() {
         return purchaseID;
     }
