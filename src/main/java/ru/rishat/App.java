@@ -32,19 +32,16 @@ public class App {
 
         try {
             positionController.scanAllPositions(driver);
-
             positionController.saveAllPositionsToFile();
         } catch (RuntimeException e) {
-            driver.quit();
             e.printStackTrace();
+        } finally {
+            driver.quit();
         }
-
 
         Instant end = Instant.now();
         logger.info("End");
         long totalTime = Duration.between(start, end).toMinutes();
         logger.log(Level.INFO, "Total time: " + totalTime + " min");
-
-
     }
 }
