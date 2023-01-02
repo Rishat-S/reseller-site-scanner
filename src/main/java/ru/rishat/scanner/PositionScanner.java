@@ -5,9 +5,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.WheelInput;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.logging.Logger;
+
+import static ru.rishat.constants.Constants.XPATH_FRAME_;
+import static ru.rishat.constants.Constants.XPATH_IMAGE;
 
 public class PositionScanner {
     private static final Logger logger = Logger.getLogger(PositionScanner.class.getName());
@@ -38,6 +44,11 @@ public class PositionScanner {
         new Actions(driver)
                 .scrollToElement(driver.findElement(By.xpath(xpath)))
                 .perform();
+    }
+
+    public static WebElement waitToVisibilityOfElementLocated(WebDriver driver, String xpath, long seconds ) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(seconds));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
     // Handlers

@@ -2,6 +2,7 @@ package ru.rishat;
 
 import org.openqa.selenium.WebDriver;
 import ru.rishat.config.WebDriverConfig;
+import ru.rishat.controller.PositionController;
 import ru.rishat.login.LogIn;
 
 import java.time.Duration;
@@ -16,21 +17,33 @@ import static ru.rishat.constants.Constants.MARKET_STATE_PLACE;
  */
 public class App {
     private static final Logger logger = Logger.getLogger(App.class.getName());
+    private static final WebDriver driver = WebDriverConfig.getWebDriver();
+    static PositionController positionController = new PositionController();
+    public static void main(String[] args) throws InterruptedException {
 
-    public static void main(String[] args) {
         Instant start = Instant.now();
         logger.log(Level.INFO, "Start");
 
-        WebDriver driver = WebDriverConfig.getWebDriver();
         driver.get(MARKET_STATE_PLACE);
         LogIn.logIn(driver);
+        synchronized (driver) {
+            driver.wait(3000);
+        }
 
-        //TODO:
+        try {
+            positionController.scanAllPositions(driver);
+
+            positionController.saveAllPositionsToFile();
+        } catch (RuntimeException e) {
+            driver.quit();
+            e.printStackTrace();
+        }
+
 
         Instant end = Instant.now();
         logger.info("End");
-        long totalTime = Duration.between(start, end).toSeconds();
-        logger.log(Level.INFO, "Total time: " + totalTime + " s");
+        long totalTime = Duration.between(start, end).toMinutes();
+        logger.log(Level.INFO, "Total time: " + totalTime + " min");
 
 
     }

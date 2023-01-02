@@ -1,5 +1,9 @@
 package ru.rishat.entity;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class Position {
@@ -14,6 +18,19 @@ public class Position {
     private int productPurchasePrise;
     private String photoName;
     private int percent;
+    private String pointOfSale;
+
+    public void setResellerID(long resellerID) {
+        this.resellerID = resellerID;
+    }
+
+    public String getPointOfSale() {
+        return pointOfSale;
+    }
+
+    public void setPointOfSale(String pointOfSale) {
+        this.pointOfSale = pointOfSale;
+    }
 
     public long getIntermediatePrice() {
         long result;
@@ -49,8 +66,11 @@ public class Position {
         return resellerID;
     }
 
-    public void setResellerID(long resellerID) {
-        this.resellerID = resellerID;
+    public void setResellerID(WebDriver driver, String xpathTitle) {
+        final String[] titleOfFrame = driver.findElement(By.xpath(xpathTitle)).getText().split("/");
+        System.out.println("Title is " + Arrays.toString(titleOfFrame));
+        this.setPositionID(Integer.parseInt(titleOfFrame[1]));
+        this.resellerID = Long.parseLong(titleOfFrame[0].split("№")[1]);
     }
 
     public String getResellerName() {
@@ -107,5 +127,13 @@ public class Position {
 
     public void setPercent(int percent) {
         this.percent = percent;
+    }
+
+    public double getSum() {
+        return this.productAmount * this.getPrice();
+    }
+
+    public double getPurchaseSum() {
+        return this.productAmount * this.getProductPurchasePrise();
     }
 }
