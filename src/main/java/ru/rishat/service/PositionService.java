@@ -79,7 +79,7 @@ public class PositionService {
             currentFrameElementsCount = frameElements.size();
             for (int i = 0; i < 5; i++) {
                 new Actions(driver)
-                        .scrollToElement(driver.findElement(By.xpath(XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE)))
+                        .scrollToElement(positionScanner.findElementByXpath(driver,XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE))
                         .perform();
 
                 synchronized (driver) {
@@ -93,7 +93,7 @@ public class PositionService {
                         if (numberOfCurrentElement > currentFrameElementsCount) {
                             return;
                         }
-                        logger.log(Level.INFO, "Number of current element - " + numberOfCurrentElement);
+                        logger.log(Level.INFO, ">>> Number of current element - " + numberOfCurrentElement);
                         final String xpathImage = XPATH_FRAME_ + numberOfCurrentElement + XPATH_IMAGE;
                         final String xpathTitle = XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE;
                         final String xpathReseller = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SELLER;
@@ -102,6 +102,21 @@ public class PositionService {
                         final String xpathLine = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE;
 
                         Position position = new Position();
+                        //TODO:
+                        String loadedOrNot = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + "]").getText();
+                        while (loadedOrNot.equals("Загрузка...")) {
+                            WheelInput.ScrollOrigin scrollOrigin = WheelInput.ScrollOrigin.fromViewport();
+                            new Actions(driver)
+                                    .scrollFromOrigin(scrollOrigin, 0, 100)
+                                    .perform();
+                            synchronized (driver) {
+                                driver.wait(2000);
+                            }
+                            loadedOrNot = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + "]").getText();
+                            synchronized (driver) {
+                                driver.wait(2000);
+                            }
+                        }
                         final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle).getText().split("/");
                         logger.log(Level.INFO, "--------------- Title is --- " + Arrays.toString(titleOfFrame));
                         position.setPositionID(Integer.parseInt(titleOfFrame[1]));
@@ -129,7 +144,7 @@ public class PositionService {
                 } catch (NoSuchElementException e) {
                     e.printStackTrace();
                     logger.log(Level.INFO,
-                            "Current element - " + numberOfCurrentElement + "\n"
+                            "<<<>>> Current element - " + numberOfCurrentElement + "\n <<<>>>"
                                     + positionScanner.findElementByXpath(driver,
                                     XPATH_FRAME_ + numberOfCurrentElement + "]").getText());
                 }
