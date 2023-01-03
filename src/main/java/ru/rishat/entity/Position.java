@@ -66,11 +66,8 @@ public class Position {
         return resellerID;
     }
 
-    public void setResellerID(WebDriver driver, String xpathTitle) {
-        final String[] titleOfFrame = driver.findElement(By.xpath(xpathTitle)).getText().split("/");
-        System.out.println("Title is " + Arrays.toString(titleOfFrame));
-        this.setPositionID(Integer.parseInt(titleOfFrame[1]));
-        this.setResellerID(Long.parseLong(titleOfFrame[0].split("№")[1]));
+    public void setResellerID(Long resellerID) {
+        this.resellerID = resellerID;
     }
 
     public String getResellerName() {

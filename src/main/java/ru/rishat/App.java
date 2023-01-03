@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static ru.rishat.constants.Constants.MARKET_STATE_PLACE;
+import static ru.rishat.constants.Constants.PURCHASE_ID;
 
 /**
  *
@@ -22,7 +23,7 @@ public class App {
     public static void main(String[] args) throws InterruptedException {
 
         Instant start = Instant.now();
-        logger.log(Level.INFO, "Start");
+        logger.log(Level.INFO, "Start program, try scan purchase - " + PURCHASE_ID);
 
         driver.get(MARKET_STATE_PLACE);
         LogIn.logIn(driver);
@@ -36,11 +37,11 @@ public class App {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            driver.quit();
+//            driver.quit();
         }
 
         Instant end = Instant.now();
-        logger.info("End");
+        logger.info("End program");
         long totalTime = Duration.between(start, end).toMinutes();
         logger.log(Level.INFO, "Total time: " + totalTime + " min");
     }

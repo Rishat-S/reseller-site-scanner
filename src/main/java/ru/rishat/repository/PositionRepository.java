@@ -31,7 +31,7 @@ public class PositionRepository {
 
     public void savePosition(Position position) {
         positions.add(position);
-        logger.log(Level.INFO, "Position" + position.getPositionID() + " was saved to queue");
+        logger.log(Level.INFO, "------------- Position " + position.getPositionID() + " was saved to queue --------------");
     }
 
     public void saveAllPositionsToFile() {

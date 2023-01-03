@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +31,7 @@ public class PositionService {
         final String pathname = PATH_IMAGES_PHOTO_OF_PURCHASE;
         String[] styles;
         do {
-            WebElement image = positionScanner.findElementByXpath(driver,xpathImage);
+            WebElement image = positionScanner.findElementByXpath(driver, xpathImage);
             styles = image.getAttribute("style").split("\"");
             logger.log(Level.INFO, "Style attribute length is " + styles.length);
         } while (styles.length != 3);
@@ -92,7 +93,7 @@ public class PositionService {
                         if (numberOfCurrentElement > currentFrameElementsCount) {
                             return;
                         }
-                        logger.log(Level.INFO, "Number of current element -" + numberOfCurrentElement);
+                        logger.log(Level.INFO, "Number of current element - " + numberOfCurrentElement);
                         final String xpathImage = XPATH_FRAME_ + numberOfCurrentElement + XPATH_IMAGE;
                         final String xpathTitle = XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE;
                         final String xpathReseller = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SELLER;
@@ -101,7 +102,10 @@ public class PositionService {
                         final String xpathLine = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE;
 
                         Position position = new Position();
-                        position.setResellerID(driver, xpathTitle);
+                        final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle).getText().split("/");
+                        logger.log(Level.INFO, "--------------- Title is --- " + Arrays.toString(titleOfFrame));
+                        position.setPositionID(Integer.parseInt(titleOfFrame[1]));
+                        position.setResellerID(Long.parseLong(titleOfFrame[0].split("№")[1]));
                         position.setResellerName(positionScanner.findElementByXpath(driver, xpathReseller).getText());
                         //TODO:
                         position.setBuyersName(positionScanner.findElementByXpath(driver, xpathComment).getText());
@@ -124,6 +128,10 @@ public class PositionService {
 
                 } catch (NoSuchElementException e) {
                     e.printStackTrace();
+                    logger.log(Level.INFO,
+                            "Current element - " + numberOfCurrentElement + "\n"
+                                    + positionScanner.findElementByXpath(driver,
+                                    XPATH_FRAME_ + numberOfCurrentElement + "]").getText());
                 }
             }
         }
