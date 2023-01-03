@@ -92,7 +92,7 @@ public class PositionService {
                         if (numberOfCurrentElement > currentFrameElementsCount) {
                             return;
                         }
-                        System.out.printf("Number of current element -> %d\n", numberOfCurrentElement);
+                        logger.log(Level.INFO, "Number of current element -" + numberOfCurrentElement);
                         final String xpathImage = XPATH_FRAME_ + numberOfCurrentElement + XPATH_IMAGE;
                         final String xpathTitle = XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE;
                         final String xpathReseller = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SELLER;
@@ -109,15 +109,16 @@ public class PositionService {
                         position.setPercent(10);
 
                         final String[] splitSum = positionScanner.findElementByXpath(driver, xpathSum).getText().split("₽");
-                        System.out.println("purchasePrice is " + splitSum[0]);
+                        logger.log(Level.INFO, "purchasePrice is " + splitSum[0]);
                         position.setProductPurchasePrise(Integer.parseInt(splitSum[0]));
 
                         final String[] splitInter = splitSum[1].split(" ");
                         final String[] splitAmount = splitInter[2].split("шт");
-                        System.out.println("amount is " + splitAmount[0]);
+                        logger.log(Level.INFO, "amount is " + splitAmount[0]);
                         position.setProductAmount(Integer.parseInt(splitAmount[0]));
                         position.setPointOfSale(positionScanner.findElementByXpath(driver, xpathLine).getText());
                         position.setPhotoName(saveImageToFile(driver, xpathImage, String.valueOf(position.getPositionID())));
+                        position.setPurchaseID(PURCHASE_ID);
                         positionRepository.savePosition(position);
                     }
 

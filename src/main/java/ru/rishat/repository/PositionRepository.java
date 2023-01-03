@@ -24,13 +24,14 @@ public class PositionRepository {
             Files.copy(in, Paths.get(photoName + ".png"), StandardCopyOption.REPLACE_EXISTING);
             logger.log(Level.INFO, "Photo " + photoName + ".png was saved");
         } catch (IOException e) {
-            logger.log(Level.INFO, "Photo don't saved");
+            logger.log(Level.INFO, "Photo " + photoName + ".png don't saved");
             throw new RuntimeException(e);
         }
     }
 
     public void savePosition(Position position) {
         positions.add(position);
+        logger.log(Level.INFO, "Position" + position.getPositionID() + " was saved to queue");
     }
 
     public void saveAllPositionsToFile() {
@@ -78,6 +79,8 @@ public class PositionRepository {
             cell.setCellValue(position.getResellerID());
             cell = row.createCell(columnCount);
             cell.setCellValue(position.getResellerName());
+            cell = row.createCell(columnCount);
+            cell.setCellValue(position.getPurchaseID());
 
             workbook.write(outputStream);
 

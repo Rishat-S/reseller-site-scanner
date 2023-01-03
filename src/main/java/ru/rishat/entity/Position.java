@@ -70,7 +70,7 @@ public class Position {
         final String[] titleOfFrame = driver.findElement(By.xpath(xpathTitle)).getText().split("/");
         System.out.println("Title is " + Arrays.toString(titleOfFrame));
         this.setPositionID(Integer.parseInt(titleOfFrame[1]));
-        this.resellerID = Long.parseLong(titleOfFrame[0].split("№")[1]);
+        this.setResellerID(Long.parseLong(titleOfFrame[0].split("№")[1]));
     }
 
     public String getResellerName() {

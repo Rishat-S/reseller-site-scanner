@@ -26,6 +26,7 @@ public class LogIn {
             driver.findElement(By.name("fr.password")).clear();
             driver.findElement(By.name("fr.password")).sendKeys(authData[1]);
             driver.findElement(By.xpath(XPATH_BUTTON_OK)).click();
+            logger.log(Level.INFO, "Authorization data is filled");
         } catch (IOException e) {
             logger.log(Level.INFO, "Can't read auth file");
             throw new RuntimeException(e);
