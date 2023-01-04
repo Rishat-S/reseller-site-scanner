@@ -7,7 +7,7 @@ target/
 *.xlsx
 *.xlsm
 *.txt
-images/photoOfPurchase/
+images/photoOfPurchase/*.png
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
