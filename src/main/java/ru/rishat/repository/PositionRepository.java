@@ -92,7 +92,7 @@ public class PositionRepository {
             cell.setCellValue(position.getPointOfSale());
             cell = row.createCell(columnCount++);
             cell.setCellValue(position.getResellerID());
-            cell = row.createCell(columnCount);
+            cell = row.createCell(columnCount++);
             cell.setCellValue(position.getResellerName());
             cell = row.createCell(columnCount);
             cell.setCellValue(position.getPurchaseID());
