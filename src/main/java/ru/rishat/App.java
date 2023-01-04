@@ -33,12 +33,13 @@ public class App {
 
         try {
             positionController.scanAllPositions(driver);
-            positionController.saveAllPositionsToFile();
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
 //            driver.quit();
         }
+
+        positionController.saveAllPositionsToFile();
 
         Instant end = Instant.now();
         logger.info("End program");

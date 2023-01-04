@@ -5,6 +5,7 @@ target/
 *.csv
 *.xls
 *.xlsx
+*.xlsm
 *.txt
 images/photoOfPurchase/
 

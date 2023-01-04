@@ -118,7 +118,7 @@ public class PositionService {
                             }
                         }
                         final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle).getText().split("/");
-                        logger.log(Level.INFO, "--------------- Title is --- " + Arrays.toString(titleOfFrame));
+                        logger.log(Level.INFO, "-->>> Title is <<<-- " + Arrays.toString(titleOfFrame));
                         position.setPositionID(Integer.parseInt(titleOfFrame[1]));
                         position.setResellerID(Long.parseLong(titleOfFrame[0].split("№")[1]));
                         position.setResellerName(positionScanner.findElementByXpath(driver, xpathReseller).getText());

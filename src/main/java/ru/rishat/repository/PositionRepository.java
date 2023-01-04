@@ -3,10 +3,7 @@ package ru.rishat.repository;
 import org.apache.poi.ss.usermodel.*;
 import ru.rishat.entity.Position;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -31,19 +28,37 @@ public class PositionRepository {
 
     public void savePosition(Position position) {
         positions.add(position);
-        logger.log(Level.INFO, "------------- Position " + position.getPositionID() + " was saved to queue --------------");
+        logger.log(Level.INFO, "-->> Position " + position.getPositionID() + " was saved to queue <<--");
     }
 
     public void saveAllPositionsToFile() {
+        File dataFile = new File("src/main/resources/data.xlsm");
+//        provideNewDataFile(dataFile);
         for (Position position : positions) {
-            savePositionToFile(position);
+            savePositionToFile(dataFile, position);
         }
     }
 
-    private static void savePositionToFile(Position position) {
-        try (FileInputStream inputStream = new FileInputStream("src/main/resources/data.xlsx");
+    private static void provideNewDataFile(File dataFile) {
+        //TODO:
+        try {
+            if (dataFile.exists() && dataFile.isFile()) {
+                if (dataFile.delete()) {
+                    logger.info("data.xlsx was deleted");
+                }
+            }
+            if (dataFile.createNewFile()) {
+                logger.info("data.xlsx was created");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void savePositionToFile(File dataFile, Position position) {
+        try (FileInputStream inputStream = new FileInputStream(dataFile);
              Workbook workbook = WorkbookFactory.create(inputStream);
-             FileOutputStream outputStream = new FileOutputStream("src/main/resources/data.xlsx");
+             FileOutputStream outputStream = new FileOutputStream(dataFile);
         ) {
             Sheet sheetAt = workbook.getSheetAt(0);
             int lastRowNum = sheetAt.getLastRowNum();
