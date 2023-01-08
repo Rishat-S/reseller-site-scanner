@@ -36,7 +36,8 @@ public class PositionService {
             logger.log(Level.INFO, "Style attribute length is " + styles.length);
         } while (styles.length != 3);
 
-        try (InputStream in = new URL(styles[1]).openStream()) {
+        String uriOfPhoto = styles[1];
+        try (InputStream in = new URL(uriOfPhoto).openStream()) {
             File pathToFolder = new File(pathname);
             if (!pathToFolder.exists()) {
                 if (pathToFolder.mkdir()) {
@@ -48,7 +49,7 @@ public class PositionService {
             e.printStackTrace();
         }
 
-        return pathname + photoName;
+        return uriOfPhoto;
     }
 
     public void scanAllPositions(WebDriver driver) throws InterruptedException {
@@ -79,7 +80,7 @@ public class PositionService {
             currentFrameElementsCount = frameElements.size();
             for (int i = 0; i < 5; i++) {
                 new Actions(driver)
-                        .scrollToElement(positionScanner.findElementByXpath(driver,XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE))
+                        .scrollToElement(positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE))
                         .perform();
 
                 synchronized (driver) {
@@ -99,9 +100,8 @@ public class PositionService {
                         final String xpathReseller = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SELLER;
                         final String xpathComment = XPATH_FRAME_ + numberOfCurrentElement + XPATH_COMMENT;
                         final String xpathSum = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SUM;
-                        final String xpathLine = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE;
+                        final String xpathPointOfSale = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE;
 
-                        Position position = new Position();
                         //TODO:
                         String loadedOrNot = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + "]").getText();
                         while (loadedOrNot.equals("Загрузка...")) {
@@ -117,28 +117,62 @@ public class PositionService {
                                 driver.wait(2000);
                             }
                         }
-                        final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle).getText().split("/");
+
+                        final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle)
+                                .getText().split("/");
                         logger.log(Level.INFO, "-->>> Title is <<<-- " + Arrays.toString(titleOfFrame));
-                        position.setPositionID(Integer.parseInt(titleOfFrame[1]));
-                        position.setResellerID(Long.parseLong(titleOfFrame[0].split("№")[1]));
-                        position.setResellerName(positionScanner.findElementByXpath(driver, xpathReseller).getText());
-                        //TODO:
-                        position.setBuyersName(positionScanner.findElementByXpath(driver, xpathComment).getText());
-                        //TODO:
-                        position.setPercent(10);
+                        final int positionID = Integer.parseInt(titleOfFrame[1]);
+                        final long resellerID = Long.parseLong(titleOfFrame[0].split("№")[1]);
+                        final String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
+                                .getText();
+                        final String[] productPurchasePriseData = positionScanner.findElementByXpath(driver, xpathSum)
+                                .getText().split("₽");
+                        final int productPurchasePrise = Integer.parseInt(productPurchasePriseData[0]);
+                        final String pointOfSale = positionScanner.findElementByXpath(driver, xpathPointOfSale)
+                                .getText();
+                        final String photoName = saveImageToFile(driver, xpathImage, String.valueOf(titleOfFrame[1]));
+                        final String[] listOfElementsInTheFrame = positionScanner.findElementByXpath(driver, xpathComment)
+                                .getText().split("\n");
 
-                        final String[] splitSum = positionScanner.findElementByXpath(driver, xpathSum).getText().split("₽");
-                        logger.log(Level.INFO, "purchasePrice is " + splitSum[0]);
-                        position.setProductPurchasePrise(Integer.parseInt(splitSum[0]));
+                        for (String elementOfFrame : listOfElementsInTheFrame) {
+                            if (elementOfFrame.equals("б/в")) {
+                                continue;
+                            }
+                            Position position = new Position();
+                            position.setPositionID(positionID);
+                            position.setResellerID(resellerID);
+                            position.setResellerName(resellerName);
+                            //TODO:
+                            final String[] elementsData = elementOfFrame.split("-");
+                            if (elementsData.length < 2) {
+                                logger.log(Level.INFO, "Does not match the template");
+                                position.setBuyersName(elementOfFrame);
+                            } else {
+                                //TODO:
+                                logger.log(Level.INFO, "Buyer's name is " + elementsData[1]);
+                                position.setBuyersName(elementsData[1].trim());
+                                logger.log(Level.INFO, "amount is " + elementsData[0]);
+                                //TODO:
+                            }
+                            int productAmount = 0;
+                            try {
+                                productAmount = Integer.parseInt(elementsData[0]);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                            position.setProductAmount(productAmount);
 
-                        final String[] splitInter = splitSum[1].split(" ");
-                        final String[] splitAmount = splitInter[2].split("шт");
-                        logger.log(Level.INFO, "amount is " + splitAmount[0]);
-                        position.setProductAmount(Integer.parseInt(splitAmount[0]));
-                        position.setPointOfSale(positionScanner.findElementByXpath(driver, xpathLine).getText());
-                        position.setPhotoName(saveImageToFile(driver, xpathImage, String.valueOf(position.getPositionID())));
-                        position.setPurchaseID(PURCHASE_ID);
-                        positionRepository.savePosition(position);
+                            //TODO:
+                            position.setPercent(10);
+
+                            position.setProductPurchasePrise(productPurchasePrise);
+                            position.setPointOfSale(pointOfSale);
+                            //TODO:
+                            position.setPhotoName(photoName);
+                            position.setPurchaseID(PURCHASE_ID);
+
+                            positionRepository.savePosition(position);
+                        }
                     }
 
                 } catch (NoSuchElementException e) {

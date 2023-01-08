@@ -1,9 +1,5 @@
 package ru.rishat.entity;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class Position {

@@ -20,6 +20,7 @@ public class App {
     private static final Logger logger = Logger.getLogger(App.class.getName());
     private static final WebDriver driver = WebDriverConfig.getWebDriver();
     static PositionController positionController = new PositionController();
+
     public static void main(String[] args) throws InterruptedException {
 
         Instant start = Instant.now();
@@ -36,7 +37,7 @@ public class App {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-//            driver.quit();
+            driver.quit();
         }
 
         positionController.saveAllPositionsToFile();
