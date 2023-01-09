@@ -14,7 +14,6 @@ class PositionTest {
 
     @BeforeAll
     public static void b() {
-        position.setPercent(10);
         position.setProductPurchasePrise(222);
     }
 
@@ -26,5 +25,12 @@ class PositionTest {
     @Test
     void getPrice280outOf250With10Percent() {
         Assertions.assertEquals(280, position.getPrice());
+    }
+
+    @Test
+    void getPrice290OfSpecialType22kl30() {
+        position.setSpecialTypeOfCalculation(true);
+        position.setPercent(30);
+        Assertions.assertEquals(290, position.getPrice());
     }
 }

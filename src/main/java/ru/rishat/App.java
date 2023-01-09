@@ -40,7 +40,11 @@ public class App {
             driver.quit();
         }
 
-        positionController.saveAllPositionsToFile();
+        try {
+            positionController.saveAllPositionsToFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Instant end = Instant.now();
         logger.info("End program");

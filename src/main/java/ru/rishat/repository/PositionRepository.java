@@ -42,23 +42,100 @@ public class PositionRepository {
     public void saveAllPositionsToFile() {
         File dataFile = new File(RESOURCES_DATA_XLSX);
         newDataFileProvider(dataFile);
-        for (Position position : positions) {
-            savePositionToFile(dataFile, position);
+        try (FileInputStream inputStream = new FileInputStream(dataFile);
+             Workbook workbook = WorkbookFactory.create(inputStream);
+             FileOutputStream outputStream = new FileOutputStream(dataFile);
+        ) {
+            Sheet sheetAt = workbook.getSheetAt(0);
+            for (Position position : positions) {
+                savePositionToFile(workbook, sheetAt, position);
+            }
+            workbook.write(outputStream);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     private void newDataFileProvider(File dataFile) {
         try (XSSFWorkbook hssfWorkbook = new XSSFWorkbook()) {
-            XSSFSheet xssfSheet = hssfWorkbook.createSheet();
+            XSSFSheet xssfSheet = hssfWorkbook.createSheet("Robot");
             xssfSheet.setDefaultRowHeightInPoints(100);
             XSSFRow row = xssfSheet.createRow(0);
 
-            for (int i = 0; i < 16; i++) {
+            for (int i = 0; i < 17; i++) {
                 XSSFCell cell = row.createCell(i);
-                if (i == 2) {
-                    xssfSheet.setColumnWidth(i, 5000);
+                switch (i) {
+                    case 0: {
+                        cell.setCellValue("коммент");
+                        break;
+                    }
+                    case 1: {
+                        cell.setCellValue("%");
+                        break;
+                    }
+                    case 2: {
+                        xssfSheet.setColumnWidth(i, 5000);
+                        cell.setCellValue("фото");
+                        break;
+                    }
+                    case 3: {
+                        cell.setCellValue("ФИО");
+                        break;
+                    }
+                    case 4: {
+                        cell.setCellValue("размер");
+                        break;
+                    }
+                    case 5: {
+                        cell.setCellValue("арт.");
+                        break;
+                    }
+                    case 6: {
+                        cell.setCellValue("кол-во");
+                        break;
+                    }
+                    case 7: {
+                        cell.setCellValue("зак. цен");
+                        break;
+                    }
+                    case 8: {
+                        cell.setCellValue("цена");
+                        break;
+                    }
+                    case 9: {
+                        cell.setCellValue("цена с орг.");
+                        break;
+                    }
+                    case 10: {
+                        cell.setCellValue("Ц*К");
+                        break;
+                    }
+                    case 11: {
+                        cell.setCellValue("зак. Ц*К");
+                        break;
+                    }
+                    case 12: {
+                        cell.setCellValue("точка");
+                        break;
+                    }
+                    case 13: {
+                        cell.setCellValue("ID посредника");
+                        break;
+                    }
+                    case 14: {
+                        cell.setCellValue("ФИО посредника");
+                        break;
+                    }
+                    case 15: {
+                        cell.setCellValue("№ Закупки");
+                        break;
+                    }
+                    case 16: {
+                        cell.setCellValue("Офис");
+                        break;
+                    }
                 }
-                cell.setCellValue(i + 1);
             }
 
             try (FileOutputStream fileOutputStream = new FileOutputStream(dataFile)) {
@@ -71,56 +148,50 @@ public class PositionRepository {
         }
     }
 
-    private static void savePositionToFile(File dataFile, Position position) {
-        try (FileInputStream inputStream = new FileInputStream(dataFile);
-             Workbook workbook = WorkbookFactory.create(inputStream);
-             FileOutputStream outputStream = new FileOutputStream(dataFile);
-        ) {
-            Sheet sheetAt = workbook.getSheetAt(0);
-            int lastRowNum = sheetAt.getLastRowNum();
-            Row row = sheetAt.createRow(++lastRowNum);
-            int columnCount = 0;
-            Cell cell = row.createCell(columnCount++);
-            setDataValidationToCell(sheetAt, cell, LIST_FOR_VALIDATION_DATA_CELL);
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getPercent());
-            cell = row.createCell(columnCount++);
-            insertImageToCell(workbook, sheetAt, cell, position.getPhotoName());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getBuyersName());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getProductSize());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getPositionID());
-            setLinkToCell(workbook, cell, position.getPhotoName());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getProductAmount());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getProductPurchasePrise());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getIntermediatePrice());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getPrice());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getSum());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getPurchaseSum());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getPointOfSale());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getResellerID());
-            cell = row.createCell(columnCount++);
-            cell.setCellValue(position.getResellerName());
-            cell = row.createCell(columnCount);
-            cell.setCellValue(position.getPurchaseID());
+    private static void savePositionToFile(Workbook workbook, Sheet sheetAt, Position position) {
 
-            workbook.write(outputStream);
+        int lastRowNum = sheetAt.getLastRowNum();
+        Row row = sheetAt.createRow(++lastRowNum);
+        int columnCount = 0;
+        Cell cell = row.createCell(columnCount++);
+        setDataValidationToCell(sheetAt, cell, LIST_FOR_VALIDATION_DATA_CELL);
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getPercent());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getPhotoName());
+        insertImageToCell(workbook, sheetAt, cell, position.getPhotoName());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getBuyersName());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getProductSize());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getPositionID());
+        setLinkToCell(workbook, cell, position.getPhotoName());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getProductAmount());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getProductPurchasePrise());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getIntermediatePrice());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getPrice());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getSum());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getPurchaseSum());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getPointOfSale());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getResellerID());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getResellerName());
+        cell = row.createCell(columnCount++);
+        cell.setCellValue(position.getPurchaseID());
+        //TODO:
+        cell = row.createCell(columnCount);
+        cell.setCellValue(position.getSpecialGoal());
+        logger.log(Level.INFO, "position " + position.getPositionID() + " was written to file");
 
-            logger.log(Level.INFO, "position " + position.getPositionID() + " was written to file");
-        } catch (IOException e) {
-            logger.log(Level.INFO, "position " + position.getPositionID() + " wasn't written to file");
-            throw new RuntimeException(e);
-        }
     }
 
     private static void setDataValidationToCell(Sheet sheetAt, Cell cell, String[] list) {
@@ -136,7 +207,6 @@ public class PositionRepository {
     }
 
     public static void insertImageToCell(Workbook workbook, Sheet sheetAt, Cell cell, String photoName) {
-        cell.setCellValue(photoName);
         try (InputStream inputStream1 = new URL(photoName).openStream()) {
             byte[] inputImageBytes = IOUtils.toByteArray(inputStream1);
             int inputImagePicture = workbook.addPicture(inputImageBytes, Workbook.PICTURE_TYPE_JPEG);
