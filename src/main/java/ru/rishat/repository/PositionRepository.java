@@ -209,11 +209,10 @@ public class PositionRepository {
         cell.setCellValue(position.getResellerID());
         cell = row.createCell(columnCount++);
         cell.setCellValue(position.getResellerName());
-        cell = row.createCell(columnCount);
+        cell = row.createCell(columnCount++);
         cell.setCellValue(position.getPurchaseID());
-//        TODO:
-//        cell = row.createCell(columnCount);
-//        cell.setCellFormula("=ЕСЛИ(ЕНД(ИНДЕКС(Таблица2[Офис],ПОИСКПОЗ(D2,Таблица2[ФИО],0),0)),\"-\",ИНДЕКС(Таблица2[Офис],ПОИСКПОЗ(D2,Таблица2[ФИО],0),0))");
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(position.getSpecialGoal());
         logger.log(Level.INFO, "position " + position.getPositionID() + " was written to file");
 
     }

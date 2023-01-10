@@ -1,9 +1,9 @@
 package ru.rishat.constants;
 
-public class Constants {
+public final class Constants {
 
     public static final long PURCHASE_ID = 35316;
-    public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/" + PURCHASE_ID + "/market?state=P&place=6-14"; // "/market?state=P&place";
+    public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/" + PURCHASE_ID + "/market?state=P&place";
     public static final String XPATH_BUTTON_OK = "//input[contains(@class,'button-pro')]";
     public static final String XPATH_FRAME = "//div[contains(@class,'pa-2')]";
     public static final String XPATH_FRAME_ = "//div[contains(@class,'pa-2')][";
