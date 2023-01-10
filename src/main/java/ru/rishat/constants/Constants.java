@@ -3,7 +3,7 @@ package ru.rishat.constants;
 public class Constants {
 
     public static final long PURCHASE_ID = 35316;
-    public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/" + PURCHASE_ID + "/market?state=P&place";
+    public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/" + PURCHASE_ID + "/market?state=P&place=6-14"; // "/market?state=P&place";
     public static final String XPATH_BUTTON_OK = "//input[contains(@class,'button-pro')]";
     public static final String XPATH_FRAME = "//div[contains(@class,'pa-2')]";
     public static final String XPATH_FRAME_ = "//div[contains(@class,'pa-2')][";
@@ -16,7 +16,7 @@ public class Constants {
     public static final String BOTTOM_TO_PAGE = "//div[@role='status']";
     public static final String PATH_IMAGES_PHOTO_OF_PURCHASE = "src/main/resources/images/photoOfPurchase/";
     public static final String RESOURCES_DATA_XLSX = "src/main/resources/data.xlsx";
-    public static final String[] LIST_FOR_VALIDATION_DATA_CELL = {"Ожидает", "Куплен", "Собран", "Выдан", "Не найден"};
+    public static final String[] LIST_FOR_VALIDATION_DATA_CELL = { "Куплен",  "Не выкуплен", "Ожидает", "Собран", "Получен", "Не найден"};
 
 
 }

@@ -41,7 +41,11 @@ public class PositionRepository {
 
     public void saveAllPositionsToFile() {
         File dataFile = new File(RESOURCES_DATA_XLSX);
-        newDataFileProvider(dataFile);
+        if (dataFile.exists() && dataFile.isFile()) {
+            System.out.println("Data file exists");
+        } else {
+            newDataFileProvider(dataFile);
+        }
         try (FileInputStream inputStream = new FileInputStream(dataFile);
              Workbook workbook = WorkbookFactory.create(inputStream);
              FileOutputStream outputStream = new FileOutputStream(dataFile);
@@ -57,17 +61,33 @@ public class PositionRepository {
         }
     }
 
+    public CellStyle createCellStyle(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setFontName("Calibri");
+        font.setBold(true);
+        font.setUnderline(Font.U_SINGLE);
+//        font.setColor());
+        style.setFont(font);
+
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        return style;
+    }
+
     private void newDataFileProvider(File dataFile) {
-        try (XSSFWorkbook hssfWorkbook = new XSSFWorkbook()) {
-            XSSFSheet xssfSheet = hssfWorkbook.createSheet("Robot");
+        try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook()) {
+            XSSFSheet xssfSheet = xssfWorkbook.createSheet("Robot");
             xssfSheet.setDefaultRowHeightInPoints(100);
             XSSFRow row = xssfSheet.createRow(0);
+            final CellStyle cellStyle = createCellStyle(xssfWorkbook);
 
             for (int i = 0; i < 17; i++) {
                 XSSFCell cell = row.createCell(i);
+                cell.setCellStyle(cellStyle);
                 switch (i) {
                     case 0: {
-                        cell.setCellValue("коммент");
+                        cell.setCellValue("Статус");
                         break;
                     }
                     case 1: {
@@ -76,7 +96,7 @@ public class PositionRepository {
                     }
                     case 2: {
                         xssfSheet.setColumnWidth(i, 5000);
-                        cell.setCellValue("фото");
+                        cell.setCellValue("Фото");
                         break;
                     }
                     case 3: {
@@ -84,7 +104,7 @@ public class PositionRepository {
                         break;
                     }
                     case 4: {
-                        cell.setCellValue("размер");
+                        cell.setCellValue("Размер");
                         break;
                     }
                     case 5: {
@@ -92,19 +112,21 @@ public class PositionRepository {
                         break;
                     }
                     case 6: {
-                        cell.setCellValue("кол-во");
+                        cell.setCellValue("Кол-во");
                         break;
                     }
                     case 7: {
-                        cell.setCellValue("зак. цен");
+                        //TODO:
+                        cell.getCellStyle().setFillBackgroundColor((short) 5);
+                        cell.setCellValue("Зак. цен");
                         break;
                     }
                     case 8: {
-                        cell.setCellValue("цена");
+                        cell.setCellValue("Цена");
                         break;
                     }
                     case 9: {
-                        cell.setCellValue("цена с орг.");
+                        cell.setCellValue("Цена с орг.");
                         break;
                     }
                     case 10: {
@@ -112,11 +134,11 @@ public class PositionRepository {
                         break;
                     }
                     case 11: {
-                        cell.setCellValue("зак. Ц*К");
+                        cell.setCellValue("Зак. Ц*К");
                         break;
                     }
                     case 12: {
-                        cell.setCellValue("точка");
+                        cell.setCellValue("Точка");
                         break;
                     }
                     case 13: {
@@ -139,7 +161,7 @@ public class PositionRepository {
             }
 
             try (FileOutputStream fileOutputStream = new FileOutputStream(dataFile)) {
-                hssfWorkbook.write(fileOutputStream);
+                xssfWorkbook.write(fileOutputStream);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -159,6 +181,8 @@ public class PositionRepository {
         cell.setCellValue(position.getPercent());
         cell = row.createCell(columnCount++);
         cell.setCellValue(position.getPhotoName());
+        //TODO:
+        setLinkToCell(workbook, cell, position.getPhotoName());
         insertImageToCell(workbook, sheetAt, cell, position.getPhotoName());
         cell = row.createCell(columnCount++);
         cell.setCellValue(position.getBuyersName());
@@ -185,11 +209,11 @@ public class PositionRepository {
         cell.setCellValue(position.getResellerID());
         cell = row.createCell(columnCount++);
         cell.setCellValue(position.getResellerName());
-        cell = row.createCell(columnCount++);
-        cell.setCellValue(position.getPurchaseID());
-        //TODO:
         cell = row.createCell(columnCount);
-        cell.setCellValue(position.getSpecialGoal());
+        cell.setCellValue(position.getPurchaseID());
+//        TODO:
+//        cell = row.createCell(columnCount);
+//        cell.setCellFormula("=ЕСЛИ(ЕНД(ИНДЕКС(Таблица2[Офис],ПОИСКПОЗ(D2,Таблица2[ФИО],0),0)),\"-\",ИНДЕКС(Таблица2[Офис],ПОИСКПОЗ(D2,Таблица2[ФИО],0),0))");
         logger.log(Level.INFO, "position " + position.getPositionID() + " was written to file");
 
     }

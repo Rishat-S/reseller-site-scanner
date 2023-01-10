@@ -79,6 +79,11 @@ public class PositionService {
             }
             currentFrameElementsCount = frameElements.size();
             for (int i = 0; i < 5; i++) {
+                //TODO:
+                if (numberOfCurrentElement > currentFrameElementsCount) {
+                    System.out.println("Exit 1 " + numberOfCurrentElement + " - " + currentFrameElementsCount);
+                    return;
+                }
                 new Actions(driver)
                         .scrollToElement(positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE))
                         .perform();
@@ -92,6 +97,7 @@ public class PositionService {
                 try {
                     for (; numberOfCurrentElement < to; numberOfCurrentElement++) {
                         if (numberOfCurrentElement > currentFrameElementsCount) {
+                            System.out.println("Exit 2 " + numberOfCurrentElement + " - " + currentFrameElementsCount);
                             return;
                         }
                         logger.log(Level.INFO, ">>> Number of current element - " + numberOfCurrentElement);
@@ -120,6 +126,7 @@ public class PositionService {
                         boolean isSpecial = false;
                         String specialGoal = "";
                         int percent = 10;
+                        boolean isBV = false;
                         final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle)
                                 .getText().split("/");
                         logger.log(Level.INFO, "-->>> Title is <<<-- " + Arrays.toString(titleOfFrame));
@@ -171,19 +178,31 @@ public class PositionService {
                             System.out.println("Specials is" + Arrays.toString(specials));
                             productPurchasePrise = (int) (Double.parseDouble(specials[0]) * 10);
                             percent = Integer.parseInt(specials[1]);
-                            listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1] = "б/в";
+                            listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1] = "";
+                            if (listOfElementsInTheFrame[listOfElementsInTheFrame.length -2].contains("б/в")) {
+                                isBV = true;
+                                System.out.println("set isBV - true");
+                            }
+                        }
+
+                        if (listOfElementsInTheFrame[listOfElementsInTheFrame.length -1].contains("б/в")) {
+                            isBV = true;
+                            System.out.println("set isBV - true");
                         }
 
                         for (String elementOfFrame : listOfElementsInTheFrame) {
                             if (elementOfFrame.equals("б/в")) {
+                                System.out.println("Skipped б/в line");
                                 continue;
                             }
                             if (elementOfFrame.isEmpty()) {
+                                System.out.println("Skipped empty line");
                                 continue;
                             }
 
                             System.out.println(elementOfFrame);
                             Position position = new Position();
+                            position.setBV(isBV);
                             position.setSpecialTypeOfCalculation(isSpecial);
                             position.setSpecialGoal(specialGoal);
                             position.setPositionID(positionID);
@@ -211,7 +230,11 @@ public class PositionService {
                             logger.log(Level.INFO, "amount is " + productAmount);
                             position.setProductAmount(productAmount);
                             logger.log(Level.INFO, "size is " + sizeOfProduct);
-                            position.setProductSize(sizeOfProduct);
+                            if (position.isBV()) {
+                                position.setProductSize(sizeOfProduct + " б/в");
+                            } else {
+                                position.setProductSize(sizeOfProduct);
+                            }
                             position.setPercent(percent);
                             position.setProductPurchasePrise(productPurchasePrise);
                             position.setPointOfSale(pointOfSale);
