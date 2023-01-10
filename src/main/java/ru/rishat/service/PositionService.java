@@ -124,8 +124,22 @@ public class PositionService {
                                 .getText().split("/");
                         logger.log(Level.INFO, "-->>> Title is <<<-- " + Arrays.toString(titleOfFrame));
                         final int positionID = Integer.parseInt(titleOfFrame[1]);
-                        final long resellerID = Long.parseLong(titleOfFrame[0]
+                        long resellerID = Long.parseLong(titleOfFrame[0]
                                 .split("№")[1]);
+
+                       switch ((int) resellerID) {
+                           case 10:
+                           case 20:
+                           case 1: {
+                               System.out.println(resellerID);
+                               break;
+                           }
+                           default: {
+                               System.out.println("!!!---The reseller doesn't match. Skipped.");
+                               continue;
+                           }
+                       }
+
                         final String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
                                 .getText();
                         final String[] productPurchasePriseData = positionScanner.findElementByXpath(driver, xpathSum)
@@ -138,41 +152,36 @@ public class PositionService {
                         final String photoName = saveImageToFile(driver, xpathImage, String.valueOf(titleOfFrame[1]));
                         String sizeOfProduct = "";
                         final String comment = positionScanner.findElementByXpath(driver, xpathComment).getText();
-                        String[] listOfElementsInTheFrame;
-                        final String[] arrayOfStringsToFindSpecial = comment.split("[*]");
-                        if (arrayOfStringsToFindSpecial.length == 2
-                                && (arrayOfStringsToFindSpecial[1].matches("([0-9]*)кл([0-9]*)")
-                                || arrayOfStringsToFindSpecial[1].matches("([0-9]*(\\.))([0-9]*)кл([0-9]*)"))) {
-                            final String specialTemplate = arrayOfStringsToFindSpecial[1];
+                        String[] listOfElementsInTheFrame = comment.split("\n");
+                        String lastElementOfTheFrame = listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1];
+                        if (lastElementOfTheFrame.matches("([0-9]*)кл([0-9]*)")
+                                || lastElementOfTheFrame.matches("([0-9]*(\\.))([0-9]*)кл([0-9]*)")
+                                || lastElementOfTheFrame.matches("\\*([0-9]*)кл([0-9]*)")
+                                || lastElementOfTheFrame.matches("\\*([0-9]*(\\.))([0-9]*)кл([0-9]*)")) {
                             isSpecial = true;
-                            specialGoal = specialTemplate;
+                            specialGoal = lastElementOfTheFrame;
                             System.out.println(specialGoal);
-                            final String[] specials = specialTemplate.split("кл");
+                            String[] specials;
+                            String[] split = specialGoal.split("[*]");
+                            if (split.length > 1) {
+                                specials = split[1].split("кл");
+                            } else {
+                                specials = lastElementOfTheFrame.split("кл");
+                            }
                             System.out.println("Specials is" + Arrays.toString(specials));
                             productPurchasePrise = (int) (Double.parseDouble(specials[0]) * 10);
                             percent = Integer.parseInt(specials[1]);
-                            listOfElementsInTheFrame = arrayOfStringsToFindSpecial[0].split("\n");
-                        } else {
-                            listOfElementsInTheFrame = comment.split("\n");
-                            String specialTemplate = listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1];
-                            if (specialTemplate.matches("([0-9]*)кл([0-9]*)") || specialTemplate.matches("([0-9]*(\\.))([0-9]*)кл([0-9]*)")) {
-                                System.out.println("!!!!!!!!!!!!!!!!!!");
-                                isSpecial = true;
-                                specialGoal = specialTemplate;
-                                System.out.println(specialGoal);
-                                final String[] specials = specialTemplate.split("кл");
-                                System.out.println("Specials is" + Arrays.toString(specials));
-                                productPurchasePrise = (int) (Double.parseDouble(specials[0]) * 10);
-                                percent = Integer.parseInt(specials[1]);
-                                listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1] = "б/в";
-                            }
+                            listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1] = "б/в";
                         }
-
 
                         for (String elementOfFrame : listOfElementsInTheFrame) {
                             if (elementOfFrame.equals("б/в")) {
                                 continue;
                             }
+                            if (elementOfFrame.isEmpty()) {
+                                continue;
+                            }
+
                             System.out.println(elementOfFrame);
                             Position position = new Position();
                             position.setSpecialTypeOfCalculation(isSpecial);
@@ -180,25 +189,16 @@ public class PositionService {
                             position.setPositionID(positionID);
                             position.setResellerID(resellerID);
                             position.setResellerName(resellerName);
-                            // TODO:
                             final String[] elementsData = elementOfFrame.split(",");
                             if (!elementsData[0].isEmpty() && elementsData.length != 1) {
                                 sizeOfProduct = elementsData[0];
                             }
-                            // TODO:
-//                            if (elementsData[0].matches("б/в")) {
-//                                position.setBV(true);
-//                            }
-//                            if (position.isBV()) {
-//                                sizeOfProduct = sizeOfProduct + " б/в";
-//                            }
                             if (elementsData.length == 1) {
                                 position.setBuyersName(elementOfFrame);
                             } else if (elementsData.length == 2) {
                                 logger.log(Level.INFO, "Buyer's name is " + elementsData[1].trim());
                                 position.setBuyersName(elementsData[1].trim());
                             } else if (elementsData.length == 3) {
-                                //TODO:
                                 logger.log(Level.INFO, "Buyer's name is " + elementsData[2].trim());
                                 position.setBuyersName(elementsData[2].trim());
                                 try {
