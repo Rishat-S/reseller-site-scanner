@@ -134,24 +134,25 @@ public class PositionService {
                         long resellerID = Long.parseLong(titleOfFrame[0]
                                 .split("№")[1]);
 
-                       switch ((int) resellerID) {
-                           case 10:
-                           case 20:
-                           case 1: {
-                               System.out.println(resellerID);
-                               break;
-                           }
-                           default: {
-                               System.out.println("!!!---The reseller doesn't match. Skipped.");
-                               continue;
-                           }
-                       }
+                        switch ((int) resellerID) {
+                            case 20:
+                            case 10:
+                            case 1: {
+                                System.out.println(resellerID);
+                                break;
+                            }
+                            default: {
+                                System.out.println("!!!---The reseller doesn't match. Skipped.");
+                                continue;
+                            }
+                        }
 
                         final String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
                                 .getText();
                         final String[] productPurchasePriseData = positionScanner.findElementByXpath(driver, xpathSum)
                                 .getText().split("₽");
                         int productPurchasePrise = (int) Double.parseDouble(productPurchasePriseData[0]);
+                        int specialProductPurchasePrise = productPurchasePrise;
                         final String[] splitAmountData = productPurchasePriseData[1].split(" ")[2].split("шт");
                         int productAmount = Integer.parseInt(splitAmountData[0]);
                         final String pointOfSale = positionScanner.findElementByXpath(driver, xpathPointOfSale)
@@ -176,16 +177,16 @@ public class PositionService {
                                 specials = lastElementOfTheFrame.split("кл");
                             }
                             System.out.println("Specials is" + Arrays.toString(specials));
-                            productPurchasePrise = (int) (Double.parseDouble(specials[0]) * 10);
+                            specialProductPurchasePrise = (int) (Double.parseDouble(specials[0]) * 10);
                             percent = Integer.parseInt(specials[1]);
                             listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1] = "";
-                            if (listOfElementsInTheFrame[listOfElementsInTheFrame.length -2].contains("б/в")) {
+                            if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 2].contains("б/в")) {
                                 isBV = true;
                                 System.out.println("set isBV - true");
                             }
                         }
 
-                        if (listOfElementsInTheFrame[listOfElementsInTheFrame.length -1].contains("б/в")) {
+                        if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1].contains("б/в")) {
                             isBV = true;
                             System.out.println("set isBV - true");
                         }
@@ -237,6 +238,7 @@ public class PositionService {
                             }
                             position.setPercent(percent);
                             position.setProductPurchasePrise(productPurchasePrise);
+                            position.setSpecialProductPurchasePrise(specialProductPurchasePrise);
                             position.setPointOfSale(pointOfSale);
                             position.setPhotoName(photoName);
                             position.setPurchaseID(PURCHASE_ID);

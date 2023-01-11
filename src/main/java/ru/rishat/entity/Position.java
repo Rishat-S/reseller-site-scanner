@@ -12,12 +12,21 @@ public class Position {
     private String productSize;
     private int productAmount;
     private int productPurchasePrise;
+    private int SpecialProductPurchasePrise;
     private String photoName;
     private int percent = 10;
     private int percentOfIntermediatePrice = 10;
     private String pointOfSale;
     private boolean isSpecialTypeOfCalculation = false;
     private boolean isBV = false;
+
+    public int getSpecialProductPurchasePrise() {
+        return SpecialProductPurchasePrise;
+    }
+
+    public void setSpecialProductPurchasePrise(int specialProductPurchasePrise) {
+        SpecialProductPurchasePrise = specialProductPurchasePrise;
+    }
 
     public boolean isBV() {
         return isBV;
@@ -68,7 +77,7 @@ public class Position {
     public long getIntermediatePrice() {
         long result;
         if (isSpecialTypeOfCalculation) {
-            result = this.getPrice();
+            result = this.getSpecialProductPurchasePrise();
         } else {
             double percentAmount = this.getPercentOfIntermediatePrice() * this.getProductPurchasePrise() / 100.;
             result = (long) (Math.ceil((this.getProductPurchasePrise() + percentAmount) / 10.) * 10);
@@ -79,11 +88,11 @@ public class Position {
     public long getPrice() {
         long result;
         if (isSpecialTypeOfCalculation) {
-            double percentAmount = this.getPercent() * this.getProductPurchasePrise() / 100.;
-            result = (long) (Math.ceil((this.getProductPurchasePrise() + percentAmount) / 10.) * 10);
+            double percentAmount = this.getPercent() * this.getSpecialProductPurchasePrise() / 100.;
+            result = (long) (Math.ceil((this.getSpecialProductPurchasePrise() + percentAmount) / 10.) * 10);
         } else {
-            double percentAmount = 10 * this.getIntermediatePrice() / 100.;
-            result = (long) (Math.ceil((this.getIntermediatePrice() + percentAmount) / 10.) * 10);
+            double percentAmount = this.getPercent() * this.getIntermediatePrice() / 100.;
+            result = (long) (Math.ceil(this.getIntermediatePrice() + percentAmount));
         }
         return result;
     }
