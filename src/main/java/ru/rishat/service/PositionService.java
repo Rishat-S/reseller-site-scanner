@@ -3,8 +3,6 @@ package ru.rishat.service;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.interactions.WheelInput;
 import ru.rishat.entity.Position;
 import ru.rishat.repository.PositionRepository;
 import ru.rishat.scanner.PositionScanner;
@@ -24,32 +22,6 @@ public class PositionService {
     private static final Logger logger = Logger.getLogger(PositionService.class.getName());
     private static final PositionScanner positionScanner = new PositionScanner();
     private static final PositionRepository positionRepository = new PositionRepository();
-
-    public String saveImageToFile(WebDriver driver, String xpathImage, String photoName) {
-        PositionScanner.waitToVisibilityOfElementLocated(driver, xpathImage, 10);
-        final String pathname = PATH_IMAGES_PHOTO_OF_PURCHASE;
-        String[] styles;
-        do {
-            WebElement image = positionScanner.findElementByXpath(driver, xpathImage);
-            styles = image.getAttribute("style").split("\"");
-            logger.log(Level.INFO, "Style attribute length is " + styles.length);
-        } while (styles.length != 3);
-
-        String uriOfPhoto = styles[1];
-        try (InputStream in = new URL(uriOfPhoto).openStream()) {
-            File pathToFolder = new File(pathname);
-            if (!pathToFolder.exists()) {
-                if (pathToFolder.mkdir()) {
-                    logger.log(Level.INFO, "The folder " + pathname + " does not exist and was created");
-                }
-            }
-            positionRepository.saveImageToFile(in, pathname + photoName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return uriOfPhoto;
-    }
 
     public void scanAllPositions(WebDriver driver) throws InterruptedException {
         int numberOfCurrentElement = 1;
@@ -100,25 +72,13 @@ public class PositionService {
                         final String xpathSum = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SUM;
                         final String xpathPointOfSale = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE;
 
-                        String loadedOrNot = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + "]").getText();
-                        while (loadedOrNot.equals("Загрузка...")) {
-                            WheelInput.ScrollOrigin scrollOrigin = WheelInput.ScrollOrigin.fromViewport();
-                            new Actions(driver)
-                                    .scrollFromOrigin(scrollOrigin, 0, 100)
-                                    .perform();
-                            synchronized (driver) {
-                                driver.wait(2000);
-                            }
-                            loadedOrNot = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + "]").getText();
-                            synchronized (driver) {
-                                driver.wait(2000);
-                            }
-                        }
-
                         boolean isSpecial = false;
                         String specialGoal = "";
                         int percent = 10;
                         boolean isBV = false;
+
+                        checkItIfTheFrameHasLoaded(driver, numberOfCurrentElement);
+
                         final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle)
                                 .getText().split("/");
                         logger.log(Level.INFO, "-->>> Title is <<<-- " + Arrays.toString(titleOfFrame));
@@ -245,6 +205,46 @@ public class PositionService {
                                     + positionScanner.findElementByXpath(driver,
                                     XPATH_FRAME_ + numberOfCurrentElement + "]").getText());
                 }
+            }
+        }
+    }
+
+    public String saveImageToFile(WebDriver driver, String xpathImage, String photoName) {
+        PositionScanner.waitToVisibilityOfElementLocated(driver, xpathImage, 10);
+        final String pathname = PATH_IMAGES_PHOTO_OF_PURCHASE;
+        String[] styles;
+        do {
+            WebElement image = positionScanner.findElementByXpath(driver, xpathImage);
+            styles = image.getAttribute("style").split("\"");
+            logger.log(Level.INFO, "Style attribute length is " + styles.length);
+        } while (styles.length != 3);
+
+        String uriOfPhoto = styles[1];
+        try (InputStream in = new URL(uriOfPhoto).openStream()) {
+            File pathToFolder = new File(pathname);
+            if (!pathToFolder.exists()) {
+                if (pathToFolder.mkdir()) {
+                    logger.log(Level.INFO, "The folder " + pathname + " does not exist and was created");
+                }
+            }
+            positionRepository.saveImageToFile(in, pathname + photoName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return uriOfPhoto;
+    }
+
+    private static void checkItIfTheFrameHasLoaded(WebDriver driver, int numberOfCurrentElement) throws InterruptedException {
+        String loadedOrNot = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + "]").getText();
+        while (loadedOrNot.equals("Загрузка...")) {
+            positionScanner.scrollDownToDeltaY(driver, 100);
+            synchronized (driver) {
+                driver.wait(2000);
+            }
+            loadedOrNot = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + "]").getText();
+            synchronized (driver) {
+                driver.wait(2000);
             }
         }
     }
