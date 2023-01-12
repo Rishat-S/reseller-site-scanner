@@ -55,23 +55,26 @@ public class PositionRepository {
                 savePositionToFile(workbook, sheetAt, position);
             }
             workbook.write(outputStream);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public CellStyle createCellStyle(Workbook workbook) {
+    public CellStyle createCellStyleForHeader(Workbook workbook) {
         CellStyle style = workbook.createCellStyle();
         Font font = workbook.createFont();
         font.setFontName("Calibri");
         font.setBold(true);
         font.setUnderline(Font.U_SINGLE);
-//        font.setColor());
         style.setFont(font);
-
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setRotation((short) 90);
+        return style;
+    }
+    public static CellStyle createCellStyleAnotherCells(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        style.setRotation((short) 90);
         return style;
     }
 
@@ -80,7 +83,7 @@ public class PositionRepository {
             XSSFSheet xssfSheet = xssfWorkbook.createSheet("Robot");
             xssfSheet.setDefaultRowHeightInPoints(100);
             XSSFRow row = xssfSheet.createRow(0);
-            final CellStyle cellStyle = createCellStyle(xssfWorkbook);
+            final CellStyle cellStyle = createCellStyleForHeader(xssfWorkbook);
 
             for (int i = 0; i < 17; i++) {
                 XSSFCell cell = row.createCell(i);
@@ -117,7 +120,7 @@ public class PositionRepository {
                     }
                     case 7: {
                         //TODO:
-                        cell.getCellStyle().setFillBackgroundColor((short) 5);
+                        cell.getCellStyle().setFillBackgroundColor((short) 500);
                         cell.setCellValue("Зак. цен");
                         break;
                     }
@@ -171,47 +174,64 @@ public class PositionRepository {
     }
 
     private static void savePositionToFile(Workbook workbook, Sheet sheetAt, Position position) {
-
+        final CellStyle cellStyle = createCellStyleAnotherCells(workbook);
         int lastRowNum = sheetAt.getLastRowNum();
         Row row = sheetAt.createRow(++lastRowNum);
         int columnCount = 0;
         Cell cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         setDataValidationToCell(sheetAt, cell, LIST_FOR_VALIDATION_DATA_CELL);
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPercent());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPhotoName());
         //TODO:
         setLinkToCell(workbook, cell, position.getPhotoName());
         insertImageToCell(workbook, sheetAt, cell, position.getPhotoName());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getBuyersName());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getProductSize());
         cell = row.createCell(columnCount++);
-        cell.setCellValue(position.getPositionID());
         setLinkToCell(workbook, cell, position.getPhotoName());
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(position.getPositionID());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getProductAmount());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getProductPurchasePrise());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getIntermediatePrice());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPrice());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getSum());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPurchaseSum());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPointOfSale());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getResellerID());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getResellerName());
         cell = row.createCell(columnCount++);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPurchaseID());
         cell = row.createCell(++columnCount);
+        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getSpecialGoal());
         logger.log(Level.INFO, "position " + position.getPositionID() + " was written to file");
 
