@@ -79,7 +79,6 @@ public class PositionService {
             }
             currentFrameElementsCount = frameElements.size();
             for (int i = 0; i < 5; i++) {
-                //TODO:
                 if (numberOfCurrentElement > currentFrameElementsCount) {
                     System.out.println("Exit 1 " + numberOfCurrentElement + " - " + currentFrameElementsCount);
                     return;
@@ -134,10 +133,11 @@ public class PositionService {
                         long resellerID = Long.parseLong(titleOfFrame[0]
                                 .split("№")[1]);
 
+                        //TODO: configure resellers selection
                         switch ((int) resellerID) {
                             case 20:
-                            case 10:
-                            case 1: {
+                            case 1:
+                            case 10: {
                                 System.out.println(resellerID);
                                 break;
                             }
