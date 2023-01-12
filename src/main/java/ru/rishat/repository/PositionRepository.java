@@ -187,7 +187,6 @@ public class PositionRepository {
         cell = row.createCell(columnCount++);
         cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPhotoName());
-        //TODO:
         setLinkToCell(workbook, cell, position.getPhotoName());
         insertImageToCell(workbook, sheetAt, cell, position.getPhotoName());
         cell = row.createCell(columnCount++);

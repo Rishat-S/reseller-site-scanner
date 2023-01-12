@@ -12,11 +12,9 @@ import java.time.Duration;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static ru.rishat.constants.Constants.XPATH_FRAME_;
-import static ru.rishat.constants.Constants.XPATH_IMAGE;
-
 public class PositionScanner {
     private static final Logger logger = Logger.getLogger(PositionScanner.class.getName());
+
     public WebElement findElementByTagName(WebDriver driver, String tagName) {
         return driver.findElement(By.tagName(tagName));
     }
@@ -45,12 +43,15 @@ public class PositionScanner {
                 .scrollToElement(driver.findElement(By.xpath(xpath)))
                 .perform();
     }
+    public void scrollDownToElementByWebElement(WebDriver driver, WebElement webElement) {
+        new Actions(driver)
+                .scrollToElement(webElement)
+                .perform();
+    }
 
-    public static WebElement waitToVisibilityOfElementLocated(WebDriver driver, String xpath, long seconds ) {
+    public static WebElement waitToVisibilityOfElementLocated(WebDriver driver, String xpath, long seconds) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(seconds));
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
-
-    // Handlers
 
 }

@@ -17,6 +17,5 @@ public final class Constants {
     public static final String PATH_IMAGES_PHOTO_OF_PURCHASE = "src/main/resources/images/photoOfPurchase/";
     public static final String RESOURCES_DATA_XLSX = "src/main/resources/data.xlsx";
     public static final String[] LIST_FOR_VALIDATION_DATA_CELL = {"Куплен", "Не выкуплен", "Ожидает", "Собран", "Получен", "Не найден"};
-
-
+    public static final String BV = "б/в";
 }

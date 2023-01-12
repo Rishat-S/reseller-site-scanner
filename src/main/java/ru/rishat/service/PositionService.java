@@ -1,6 +1,5 @@
 package ru.rishat.service;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -59,20 +58,15 @@ public class PositionService {
 
         while (true) {
             if (numberOfCurrentElement == 1) {
-                WheelInput.ScrollOrigin scrollOrigin = WheelInput.ScrollOrigin.fromViewport();
-                new Actions(driver)
-                        .scrollFromOrigin(scrollOrigin, 0, 500)
-                        .perform();
+                positionScanner.scrollDownToDeltaY(driver, 500);
             } else {
-                new Actions(driver)
-                        .scrollToElement(positionScanner.findElementByXpath(driver, BOTTOM_TO_PAGE))
-                        .perform();
+                positionScanner.scrollDownToElementByXpath(driver, BOTTOM_TO_PAGE);
             }
             synchronized (driver) {
                 driver.wait(5000);
             }
 
-            final List<WebElement> frameElements = driver.findElements(By.xpath(XPATH_FRAME));
+            final List<WebElement> frameElements = positionScanner.findAllElementsByXpath(driver, XPATH_FRAME);
             allFrameElementCounts = frameElements.size();
             if (allFrameElementCounts == currentFrameElementsCount) {
                 return;
@@ -83,9 +77,8 @@ public class PositionService {
                     System.out.println("Exit 1 " + numberOfCurrentElement + " - " + currentFrameElementsCount);
                     return;
                 }
-                new Actions(driver)
-                        .scrollToElement(positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE))
-                        .perform();
+                WebElement elementByXpath = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE);
+                positionScanner.scrollDownToElementByWebElement(driver, elementByXpath);
 
                 synchronized (driver) {
                     driver.wait(2000);
@@ -180,19 +173,17 @@ public class PositionService {
                             specialProductPurchasePrise = (int) (Double.parseDouble(specials[0]) * 10);
                             percent = Integer.parseInt(specials[1]);
                             listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1] = "";
-                            if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 2].contains("б/в")) {
+                            if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 2].contains(BV)) {
                                 isBV = true;
-                                System.out.println("set isBV - true");
                             }
                         }
 
-                        if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1].contains("б/в")) {
+                        if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1].contains(BV)) {
                             isBV = true;
-                            System.out.println("set isBV - true");
                         }
 
                         for (String elementOfFrame : listOfElementsInTheFrame) {
-                            if (elementOfFrame.equals("б/в")) {
+                            if (elementOfFrame.equals(BV)) {
                                 System.out.println("Skipped б/в line");
                                 continue;
                             }
