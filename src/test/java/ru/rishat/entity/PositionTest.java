@@ -13,24 +13,29 @@ class PositionTest {
     static Position position = new Position();
 
     @BeforeAll
-    public static void b() {
-        position.setProductPurchasePrise(222);
+    public static void setPurchasePrice() {
+        position.setProductPurchasePrice(222);
     }
 
     @Test
     void getIntermediatePrice250outOf222With10Percent() {
+        position.setSpecialTypeOfCalculation(false);
+        position.setPercent(10);
         Assertions.assertEquals(250, position.getIntermediatePrice());
     }
 
     @Test
-    void getPrice280outOf250With10Percent() {
-        Assertions.assertEquals(280, position.getPrice());
+    void getPrice275outOf250With10Percent() {
+        position.setSpecialTypeOfCalculation(false);
+        position.setPercent(10);
+        Assertions.assertEquals(275, position.getPrice());
     }
 
     @Test
-    void getPrice290OfSpecialType22kl30() {
+    void getPrice380OfSpecialType29kl30() {
         position.setSpecialTypeOfCalculation(true);
+        position.setSpecialProductPurchasePrice(290);
         position.setPercent(30);
-        Assertions.assertEquals(290, position.getPrice());
+        Assertions.assertEquals(380, position.getPrice());
     }
 }

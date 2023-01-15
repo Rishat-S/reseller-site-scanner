@@ -72,11 +72,6 @@ public class PositionRepository {
         style.setRotation((short) 90);
         return style;
     }
-    public static CellStyle createCellStyleAnotherCells(Workbook workbook) {
-        CellStyle style = workbook.createCellStyle();
-        style.setRotation((short) 90);
-        return style;
-    }
 
     private void newDataFileProvider(File dataFile) {
         try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook()) {
@@ -174,64 +169,47 @@ public class PositionRepository {
     }
 
     private static void savePositionToFile(Workbook workbook, Sheet sheetAt, Position position) {
-        final CellStyle cellStyle = createCellStyleAnotherCells(workbook);
         int lastRowNum = sheetAt.getLastRowNum();
         Row row = sheetAt.createRow(++lastRowNum);
         int columnCount = 0;
         Cell cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         setDataValidationToCell(sheetAt, cell, LIST_FOR_VALIDATION_DATA_CELL);
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPercent());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
-        cell.setCellValue(position.getPhotoName());
-        setLinkToCell(workbook, cell, position.getPhotoName());
-        insertImageToCell(workbook, sheetAt, cell, position.getPhotoName());
+        cell.setCellValue(position.getPhotoURL());
+        setLinkToCell(workbook, cell, position.getPhotoURL());
+        insertImageToCellFromURL(workbook, sheetAt, cell, position.getPhotoURL());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getBuyersName());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getProductSize());
         cell = row.createCell(columnCount++);
-        setLinkToCell(workbook, cell, position.getPhotoName());
-        cell.setCellStyle(cellStyle);
+        setLinkToCell(workbook, cell, position.getPhotoURL());
         cell.setCellValue(position.getPositionID());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getProductAmount());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
-        cell.setCellValue(position.getProductPurchasePrise());
+        cell.setCellValue(position.getProductPurchasePrice());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getIntermediatePrice());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPrice());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getSum());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPurchaseSum());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPointOfSale());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getResellerID());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getResellerName());
         cell = row.createCell(columnCount++);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getPurchaseID());
         cell = row.createCell(++columnCount);
-        cell.setCellStyle(cellStyle);
         cell.setCellValue(position.getSpecialGoal());
+
         logger.log(Level.INFO, "position " + position.getPositionID() + " was written to file");
 
     }
@@ -248,8 +226,8 @@ public class PositionRepository {
         sheetAt.addValidationData(validation);
     }
 
-    public static void insertImageToCell(Workbook workbook, Sheet sheetAt, Cell cell, String photoName) {
-        try (InputStream inputStream1 = new URL(photoName).openStream()) {
+    public static void insertImageToCellFromURL(Workbook workbook, Sheet sheetAt, Cell cell, String url) {
+        try (InputStream inputStream1 = new URL(url).openStream()) {
             byte[] inputImageBytes = IOUtils.toByteArray(inputStream1);
             int inputImagePicture = workbook.addPicture(inputImageBytes, Workbook.PICTURE_TYPE_JPEG);
             XSSFDrawing drawing = (XSSFDrawing) sheetAt.createDrawingPatriarch();

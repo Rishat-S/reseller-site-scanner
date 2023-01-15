@@ -188,10 +188,10 @@ public class PositionService {
                                 position.setProductSize(sizeOfProduct);
                             }
                             position.setPercent(percent);
-                            position.setProductPurchasePrise(productPurchasePrise);
-                            position.setSpecialProductPurchasePrise(specialProductPurchasePrise);
+                            position.setProductPurchasePrice(productPurchasePrise);
+                            position.setSpecialProductPurchasePrice(specialProductPurchasePrise);
                             position.setPointOfSale(pointOfSale);
-                            position.setPhotoName(photoName);
+                            position.setPhotoURL(photoName);
                             position.setPurchaseID(PURCHASE_ID);
 
                             positionRepository.savePosition(position);
@@ -210,7 +210,7 @@ public class PositionService {
     }
 
     public String saveImageToFile(WebDriver driver, String xpathImage, String photoName) {
-        PositionScanner.waitToVisibilityOfElementLocated(driver, xpathImage, 10);
+        PositionScanner.waitToVisibilityOfElementLocated(driver, xpathImage, 30);
         final String pathname = PATH_IMAGES_PHOTO_OF_PURCHASE;
         String[] styles;
         do {

@@ -11,21 +11,21 @@ public class Position {
     private String buyersName;
     private String productSize;
     private int productAmount;
-    private int productPurchasePrise;
-    private int SpecialProductPurchasePrise;
-    private String photoName;
+    private int productPurchasePrice;
+    private int SpecialProductPurchasePrice;
+    private String photoURL;
     private int percent = 10;
     private int percentOfIntermediatePrice = 10;
     private String pointOfSale;
     private boolean isSpecialTypeOfCalculation = false;
     private boolean isBV = false;
 
-    public int getSpecialProductPurchasePrise() {
-        return SpecialProductPurchasePrise;
+    public int getSpecialProductPurchasePrice() {
+        return SpecialProductPurchasePrice;
     }
 
-    public void setSpecialProductPurchasePrise(int specialProductPurchasePrise) {
-        SpecialProductPurchasePrise = specialProductPurchasePrise;
+    public void setSpecialProductPurchasePrice(int specialProductPurchasePrice) {
+        SpecialProductPurchasePrice = specialProductPurchasePrice;
     }
 
     public boolean isBV() {
@@ -77,10 +77,10 @@ public class Position {
     public long getIntermediatePrice() {
         long result;
         if (isSpecialTypeOfCalculation) {
-            result = this.getSpecialProductPurchasePrise();
+            result = this.getSpecialProductPurchasePrice();
         } else {
-            double percentAmount = this.getPercentOfIntermediatePrice() * this.getProductPurchasePrise() / 100.;
-            result = (long) (Math.ceil((this.getProductPurchasePrise() + percentAmount) / 10.) * 10);
+            double percentAmount = this.getPercentOfIntermediatePrice() * this.getProductPurchasePrice() / 100.;
+            result = (long) (Math.ceil((this.getProductPurchasePrice() + percentAmount) / 10.) * 10);
         }
         return result;
     }
@@ -88,8 +88,8 @@ public class Position {
     public long getPrice() {
         long result;
         if (isSpecialTypeOfCalculation) {
-            double percentAmount = this.getPercent() * this.getSpecialProductPurchasePrise() / 100.;
-            result = (long) (Math.ceil((this.getSpecialProductPurchasePrise() + percentAmount) / 10.) * 10);
+            double percentAmount = this.getPercent() * this.getSpecialProductPurchasePrice() / 100.;
+            result = (long) (Math.ceil((this.getSpecialProductPurchasePrice() + percentAmount) / 10.) * 10);
         } else {
             double percentAmount = this.getPercent() * this.getIntermediatePrice() / 100.;
             result = (long) (Math.ceil(this.getIntermediatePrice() + percentAmount));
@@ -153,20 +153,20 @@ public class Position {
         this.productAmount = productAmount;
     }
 
-    public int getProductPurchasePrise() {
-        return productPurchasePrise;
+    public int getProductPurchasePrice() {
+        return productPurchasePrice;
     }
 
-    public void setProductPurchasePrise(int productPurchasePrise) {
-        this.productPurchasePrise = productPurchasePrise;
+    public void setProductPurchasePrice(int productPurchasePrice) {
+        this.productPurchasePrice = productPurchasePrice;
     }
 
-    public String getPhotoName() {
-        return photoName;
+    public String getPhotoURL() {
+        return photoURL;
     }
 
-    public void setPhotoName(String photoName) {
-        this.photoName = photoName;
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 
     public int getPercent() {
@@ -182,6 +182,6 @@ public class Position {
     }
 
     public double getPurchaseSum() {
-        return this.productAmount * this.getProductPurchasePrise();
+        return this.productAmount * this.getProductPurchasePrice();
     }
 }
