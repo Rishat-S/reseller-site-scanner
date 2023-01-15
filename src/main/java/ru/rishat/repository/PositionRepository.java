@@ -1,6 +1,7 @@
 package ru.rishat.repository;
 
 import org.apache.poi.common.usermodel.HyperlinkType;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.util.IOUtils;
@@ -114,8 +115,6 @@ public class PositionRepository {
                         break;
                     }
                     case 7: {
-                        //TODO:
-                        cell.getCellStyle().setFillBackgroundColor((short) 500);
                         cell.setCellValue("Зак. цен");
                         break;
                     }
@@ -241,12 +240,16 @@ public class PositionRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private static void setLinkToCell(Workbook workbook, Cell cell, String photoName) {
         final CreationHelper helper = workbook.getCreationHelper();
         final CellStyle cellStyle = workbook.createCellStyle();
+        final Font font = workbook.createFont();
+        font.setFontName("Calibri");
+        font.setColor(HSSFColor.HSSFColorPredefined.BLUE.getIndex());
+        font.setUnderline(Font.U_SINGLE);
+        cellStyle.setFont(font);
         final XSSFHyperlink hyperlink = (XSSFHyperlink) helper.createHyperlink(HyperlinkType.URL);
         hyperlink.setAddress(photoName);
         cell.setHyperlink(hyperlink);
