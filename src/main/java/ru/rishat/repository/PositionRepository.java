@@ -31,7 +31,7 @@ public class PositionRepository {
             logger.log(Level.INFO, "Photo " + photoName + ".png was saved");
         } catch (IOException e) {
             logger.log(Level.INFO, "Photo " + photoName + ".png don't saved");
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
