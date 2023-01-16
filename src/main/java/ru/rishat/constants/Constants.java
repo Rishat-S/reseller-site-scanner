@@ -2,8 +2,8 @@ package ru.rishat.constants;
 
 public final class Constants {
 
-    public static final long PURCHASE_ID = 35316;
-    public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/" + PURCHASE_ID + "/market?state=P&place";
+    public static final long PURCHASE_ID = 36353;
+    public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/" + PURCHASE_ID + "/market?state=W&place";
     public static final String XPATH_BUTTON_OK = "//input[contains(@class,'button-pro')]";
     public static final String XPATH_FRAME = "//div[contains(@class,'pa-2')]";
     public static final String XPATH_FRAME_ = "//div[contains(@class,'pa-2')][";
@@ -12,9 +12,9 @@ public final class Constants {
     public static final String XPATH_SELLER = "]//div[contains(@class,'info-subtitle darken-light')]";
     public static final String XPATH_COMMENT = "]//div[contains(@class,'info-comment color-comment')]";
     public static final String XPATH_SUM = "]//div[@style='display: inline-block;']";
-    public static final String XPATH_LINE = "]//div[contains(@class,'font-weight-bold')]";
+    public static final String XPATH_LINE_OF_SELLER = "]//div[contains(@class,'font-weight-bold')]";
     public static final String BOTTOM_TO_PAGE = "//div[@role='status']";
-    public static final String PATH_IMAGES_PHOTO_OF_PURCHASE = "src/main/resources/images/photoOfPurchase/" + PURCHASE_ID + "/";
+    public static final String PATH_IMAGES_PHOTO_OF_PURCHASE = "src/main/resources/images/" + PURCHASE_ID + "/";
     public static final String RESOURCES_DATA_XLSX = "src/main/resources/data.xlsx";
     public static final String[] LIST_FOR_VALIDATION_DATA_CELL = {"Куплен", "Не выкуплен", "Ожидает", "Собран", "Получен", "Не найден"};
     public static final String BV = "б/в";

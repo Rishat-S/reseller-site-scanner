@@ -70,7 +70,7 @@ public class PositionService {
                         final String xpathReseller = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SELLER;
                         final String xpathComment = XPATH_FRAME_ + numberOfCurrentElement + XPATH_COMMENT;
                         final String xpathSum = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SUM;
-                        final String xpathPointOfSale = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE;
+                        final String xpathPointOfSale = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE_OF_SELLER;
 
                         boolean isSpecial = false;
                         String specialGoal = "";
