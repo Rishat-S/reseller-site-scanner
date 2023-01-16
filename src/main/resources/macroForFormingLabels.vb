@@ -130,16 +130,3 @@ Sub Main()
   FormatTheBordersSizeOfLabel destinationSheet
 
 End Sub
-
-
-
-
-
-
-
-
-
-
-
-
-
