@@ -5,13 +5,11 @@ import ru.rishat.config.WebDriverConfig;
 import ru.rishat.controller.FileController;
 import ru.rishat.controller.PositionController;
 import ru.rishat.controller.UserController;
-import ru.rishat.entity.User;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
