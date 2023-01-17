@@ -11,8 +11,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import ru.rishat.config.WebDriverConfig;
+import ru.rishat.entity.User;
 import ru.rishat.login.LogIn;
-import ru.rishat.service.PositionService;
+import ru.rishat.service.PositionServiceImp;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,16 +22,16 @@ import java.net.URL;
 
 import static ru.rishat.constants.Constants.*;
 
-class PositionRepositoryTest {
+class PositionRepositoryImpTest {
     static final WebDriver driver = WebDriverConfig.getWebDriver();
     static String xpath = XPATH_FRAME_
             .concat(String.valueOf(1))
             .concat(XPATH_IMAGE);
 
     @BeforeAll
-    public static void getDriver() throws InterruptedException {
+    public static void getDriver(User user) throws InterruptedException {
         driver.get(MARKET_STATE_PLACE);
-        LogIn.logIn(driver);
+        LogIn.logIn(driver, user);
         synchronized (driver) {
             driver.wait(3000);
         }
@@ -38,8 +39,8 @@ class PositionRepositoryTest {
 
     @Test
     public void saveImageToFile() {
-        PositionService positionService = new PositionService();
-        positionService.saveImageToFile(driver, xpath, "!test");
+        PositionServiceImp positionServiceImp = new PositionServiceImp();
+        positionServiceImp.saveImageToFile(driver, xpath, "!test");
     }
 
     @Test
