@@ -65,8 +65,7 @@ Sub Main()
   numberOfColumn = 0
   firstRowOfLabel = 1
   
-  
-  MsgBox "Закупка№ " & redemption & " " & resellerName & " " & numberOfFilledRows - 3 & " Labels"
+  MsgBox "Закупка № " & redemption & " " & resellerName & " " & numberOfFilledRows - 3 & " Labels"
   
   Sheets(destinationSheet).Cells.Clear
   

@@ -6,9 +6,12 @@ import ru.rishat.scanner.PositionScanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
+import static ru.rishat.constants.Constants.AUTH_CSV;
 import static ru.rishat.constants.Constants.XPATH_BUTTON_OK;
 
 public class LogIn {
@@ -17,8 +20,9 @@ public class LogIn {
 
     public static void logIn(WebDriver driver) {
         try {
-            final BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/resources/auth.csv"));
-            final String[] authData = bufferedReader.readLine().split(",");
+            final BufferedReader bufferedReader = new BufferedReader(new FileReader(AUTH_CSV));
+            List<String> collect = bufferedReader.lines().collect(Collectors.toList());
+            String[] authData = collect.get(0).split(",");
             positionScanner.findElementByTagName(driver, "button").click();
             positionScanner.findElementByName(driver, "fr.email").click();
             positionScanner.findElementByName(driver, "fr.email").clear();
