@@ -23,7 +23,7 @@ import static ru.rishat.constants.Constants.RESOURCES_DATA_XLSX;
 
 public class PositionRepositoryImp implements PositionRepository {
     private static final Logger logger = Logger.getLogger(PositionRepositoryImp.class.getName());
-    Queue<Position> positions = new LinkedList<>();
+    private final Queue<Position> positions = new LinkedList<>();
 
     @Override
     public void saveImageToFile(InputStream in, String photoName) {

@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver;
 import ru.rishat.service.PositionServiceImp;
 
 public class PositionController {
-    PositionServiceImp positionServiceImp = new PositionServiceImp();
+    private final PositionServiceImp positionServiceImp = new PositionServiceImp();
 
     public void scanAllPositions(WebDriver driver) throws InterruptedException {
         positionServiceImp.scanAllPositions(driver);

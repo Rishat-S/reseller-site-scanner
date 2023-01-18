@@ -20,9 +20,9 @@ import java.util.logging.Logger;
 import static ru.rishat.constants.Constants.*;
 
 public class PositionServiceImp implements PositionService {
-    private static final Logger logger = Logger.getLogger(PositionServiceImp.class.getName());
-    private static final PositionScanner positionScanner = new PositionScanner();
-    private static final PositionRepository POSITION_REPOSITORY_IMP = new PositionRepositoryImp();
+    private final Logger logger = Logger.getLogger(PositionServiceImp.class.getName());
+    private final PositionScanner positionScanner = new PositionScanner();
+    private final PositionRepository positionRepository = new PositionRepositoryImp();
 
     @Override
     public void scanAllPositions(WebDriver driver) throws InterruptedException {
@@ -196,7 +196,7 @@ public class PositionServiceImp implements PositionService {
                             position.setPhotoURL(photoName);
                             position.setPurchaseID(PURCHASE_ID);
 
-                            POSITION_REPOSITORY_IMP.savePosition(position);
+                            positionRepository.savePosition(position);
                         }
                     }
 
@@ -230,7 +230,7 @@ public class PositionServiceImp implements PositionService {
                     logger.log(Level.INFO, "The folder " + pathname + " does not exist and was created");
                 }
             }
-            POSITION_REPOSITORY_IMP.saveImageToFile(in, pathname + photoName);
+            positionRepository.saveImageToFile(in, pathname + photoName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -238,7 +238,7 @@ public class PositionServiceImp implements PositionService {
         return uriOfPhoto;
     }
 
-    private static void checkItIfTheFrameHasLoaded(WebDriver driver, int numberOfCurrentElement) throws InterruptedException {
+    private void checkItIfTheFrameHasLoaded(WebDriver driver, int numberOfCurrentElement) throws InterruptedException {
         String loadedOrNot = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + "]").getText();
         while (loadedOrNot.equals("Загрузка...")) {
             positionScanner.scrollDownToDeltaY(driver, 100);
@@ -254,6 +254,6 @@ public class PositionServiceImp implements PositionService {
 
     @Override
     public void saveAllPositionsToFile() {
-        POSITION_REPOSITORY_IMP.saveAllPositionsToFile();
+        positionRepository.saveAllPositionsToFile();
     }
 }

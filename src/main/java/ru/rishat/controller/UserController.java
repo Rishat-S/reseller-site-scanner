@@ -6,7 +6,7 @@ import ru.rishat.service.UserService;
 import ru.rishat.service.UserServiceImpl;
 
 public class UserController {
-    UserService userService = new UserServiceImpl();
+    private final UserService userService = new UserServiceImpl();
     public User getUser() {
         return userService.getUser();
     }

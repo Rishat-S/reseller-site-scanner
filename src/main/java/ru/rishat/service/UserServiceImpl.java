@@ -7,7 +7,7 @@ import ru.rishat.repository.UserRepository;
 import ru.rishat.repository.UserRepositoryImpl;
 
 public class UserServiceImpl implements UserService {
-    UserRepository userRepository = new UserRepositoryImpl();
+    private final UserRepository userRepository = new UserRepositoryImpl();
     @Override
     public User getUser() {
         return userRepository.getUser();
