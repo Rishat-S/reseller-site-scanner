@@ -1,8 +1,8 @@
 package ru.rishat;
 
 import org.openqa.selenium.WebDriver;
+import ru.rishat.config.GlobalVarConfig;
 import ru.rishat.config.WebDriverConfig;
-import ru.rishat.controller.FileController;
 import ru.rishat.controller.PositionController;
 import ru.rishat.controller.UserController;
 
@@ -20,17 +20,16 @@ import static ru.rishat.constants.Constants.*;
  */
 public class App {
     private static final Logger logger = Logger.getLogger(App.class.getName());
-    private static final WebDriver driver = WebDriverConfig.getWebDriver();
     static PositionController positionController = new PositionController();
     static UserController userController = new UserController();
-    static FileController fileController = new FileController();
 
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
         Instant start = Instant.now();
+        final WebDriver driver = WebDriverConfig.getWebDriver();
         logger.log(Level.INFO, "Start program, try scan purchase - " + PURCHASE_ID);
         driver.get(MARKET_STATE_PLACE);
-        DATA_FROM_FILE = fileController.readAllLinesFromFile(new File(AUTH_CSV));
+        GlobalVarConfig.initializingVariables(new File(AUTH_CSV));
         userController.logInUser(driver, userController.getUser());
 
         synchronized (driver) {

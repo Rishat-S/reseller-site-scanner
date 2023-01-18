@@ -84,7 +84,7 @@ public class PositionRepositoryImp implements PositionRepository {
             XSSFRow row = xssfSheet.createRow(0);
             final CellStyle cellStyle = createCellStyleForHeader(xssfWorkbook);
 
-            for (int i = 0; i < 17; i++) {
+            for (int i = 0; i < 18; i++) {
                 XSSFCell cell = row.createCell(i);
                 cell.setCellStyle(cellStyle);
                 switch (i) {
@@ -156,6 +156,9 @@ public class PositionRepositoryImp implements PositionRepository {
                     case 16: {
                         cell.setCellValue("Офис");
                         break;
+                    }
+                    case 17: {
+                        cell.setCellValue("ОВР");
                     }
                 }
             }
