@@ -1,19 +1,16 @@
 package ru.rishat.controller;
 
 import org.openqa.selenium.WebDriver;
-import ru.rishat.service.PositionService;
-
-import java.util.logging.Logger;
+import ru.rishat.service.PositionServiceImp;
 
 public class PositionController {
-    private static final Logger logger = Logger.getLogger(PositionController.class.getName());
-    PositionService positionService = new PositionService();
+    private final PositionServiceImp positionServiceImp = new PositionServiceImp();
 
     public void scanAllPositions(WebDriver driver) throws InterruptedException {
-        positionService.scanAllPositions(driver);
+        positionServiceImp.scanAllPositions(driver);
     }
 
     public void saveAllPositionsToFile() {
-        positionService.saveAllPositionsToFile();
+        positionServiceImp.saveAllPositionsToFile();
     }
 }

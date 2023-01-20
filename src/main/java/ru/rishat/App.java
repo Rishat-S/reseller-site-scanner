@@ -1,33 +1,37 @@
 package ru.rishat;
 
 import org.openqa.selenium.WebDriver;
+import ru.rishat.config.GlobalVarConfig;
 import ru.rishat.config.WebDriverConfig;
 import ru.rishat.controller.PositionController;
-import ru.rishat.login.LogIn;
+import ru.rishat.controller.UserController;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ru.rishat.constants.Constants.MARKET_STATE_PLACE;
-import static ru.rishat.constants.Constants.PURCHASE_ID;
+import static ru.rishat.constants.Constants.*;
 
 /**
  *
  */
 public class App {
     private static final Logger logger = Logger.getLogger(App.class.getName());
-    private static final WebDriver driver = WebDriverConfig.getWebDriver();
     static PositionController positionController = new PositionController();
+    static UserController userController = new UserController();
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
         Instant start = Instant.now();
+        final WebDriver driver = WebDriverConfig.getWebDriver();
         logger.log(Level.INFO, "Start program, try scan purchase - " + PURCHASE_ID);
-
         driver.get(MARKET_STATE_PLACE);
-        LogIn.logIn(driver);
+        GlobalVarConfig.initializingVariables(new File(AUTH_CSV));
+        userController.logInUser(driver, userController.getUser());
+
         synchronized (driver) {
             driver.wait(3000);
         }
