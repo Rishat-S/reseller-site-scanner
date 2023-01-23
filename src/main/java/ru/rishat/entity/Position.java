@@ -2,7 +2,7 @@ package ru.rishat.entity;
 
 import java.util.logging.Logger;
 
-public class Position {
+public class Position implements Comparable<Position>{
     private static final Logger logger = Logger.getLogger(Position.class.getName());
     private long purchaseID;
     private long positionID;
@@ -183,5 +183,10 @@ public class Position {
 
     public double getPurchaseSum() {
         return this.productAmount * this.getProductPurchasePrice();
+    }
+
+    @Override
+    public int compareTo(Position o) {
+        return this.getBuyersName().compareToIgnoreCase(o.getBuyersName());
     }
 }

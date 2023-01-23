@@ -51,6 +51,7 @@ public class PositionServiceImp implements PositionService {
                     System.out.println("Exit 1 " + numberOfCurrentElement + " - " + currentFrameElementsCount);
                     return;
                 }
+                //TODO: ERROR findElement
                 WebElement elementByXpath = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE);
                 positionScanner.scrollDownToElementByWebElement(driver, elementByXpath);
 
