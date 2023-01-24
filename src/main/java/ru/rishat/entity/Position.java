@@ -8,7 +8,7 @@ public class Position implements Comparable<Position>{
     private long positionID;
     private long resellerID;
     private String resellerName;
-    private String buyersName;
+    private String buyersName = "";
     private String productSize;
     private int productAmount;
     private int productPurchasePrice;
@@ -186,7 +186,37 @@ public class Position implements Comparable<Position>{
     }
 
     @Override
-    public int compareTo(Position o) {
-        return this.getBuyersName().compareToIgnoreCase(o.getBuyersName());
+    public int compareTo(Position position) {
+        int compare = 0;
+        try {
+            compare = this.getBuyersName().compareToIgnoreCase(position.getBuyersName());
+        } catch (Exception e) {
+            System.out.println(position.toString());
+            System.out.println(this);
+            throw new RuntimeException(e);
+        }
+        return compare;
+    }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "purchaseID=" + purchaseID +
+                ", positionID=" + positionID +
+                ", resellerID=" + resellerID +
+                ", resellerName='" + resellerName + '\'' +
+                ", buyersName='" + buyersName + '\'' +
+                ", productSize='" + productSize + '\'' +
+                ", productAmount=" + productAmount +
+                ", productPurchasePrice=" + productPurchasePrice +
+                ", SpecialProductPurchasePrice=" + SpecialProductPurchasePrice +
+                ", photoURL='" + photoURL + '\'' +
+                ", percent=" + percent +
+                ", percentOfIntermediatePrice=" + percentOfIntermediatePrice +
+                ", pointOfSale='" + pointOfSale + '\'' +
+                ", isSpecialTypeOfCalculation=" + isSpecialTypeOfCalculation +
+                ", isBV=" + isBV +
+                ", specialGoal='" + specialGoal + '\'' +
+                '}';
     }
 }

@@ -221,6 +221,7 @@ public class PositionServiceImp implements PositionService {
             WebElement image = positionScanner.findElementByXpath(driver, xpathImage);
             styles = image.getAttribute("style").split("\"");
             logger.log(Level.INFO, "Style attribute length is " + styles.length);
+            System.out.println(Arrays.toString(styles));
         } while (styles.length != 3);
 
         String uriOfPhoto = styles[1];
