@@ -3,8 +3,8 @@ package ru.rishat.constants;
 import java.util.List;
 
 public final class Constants {
-    public static final long PURCHASE_ID = 36353;
-    public static final String STATUS = "P";
+    public static final long PURCHASE_ID = 37146;
+    public static final String STATUS = "W";
     public static final String LINE_OF_SELLER = "";
     public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/"
             + PURCHASE_ID
@@ -31,5 +31,6 @@ public final class Constants {
             "Не найден"
     };
     public static final String BV = "б/в";
+    public static final String KL = "/";
     public static List<String> DATA_FROM_FILE;
 }

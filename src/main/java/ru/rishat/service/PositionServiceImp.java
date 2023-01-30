@@ -90,18 +90,18 @@ public class PositionServiceImp implements PositionService {
                                 .split("№")[1]);
 
                         //TODO: configure resellers selection
-                        switch ((int) resellerID) {
-                            case 20:
-                            case 1:
-                            case 10: {
-                                System.out.println(resellerID);
-                                break;
-                            }
-                            default: {
-                                System.out.println("!!!---The reseller doesn't match. Skipped.");
-                                continue;
-                            }
-                        }
+                        // switch ((int) resellerID) {
+                        // case 20:
+                        //    case 1:
+                        //    case 10: {
+                        //        System.out.println(resellerID);
+                        //        break;
+                        //    }
+                        //    default: {
+                        //        System.out.println("!!!---The reseller doesn't match. Skipped.");
+                        //        continue;
+                        //    }
+                        // }
 
                         final String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
                                 .getText();
@@ -118,19 +118,19 @@ public class PositionServiceImp implements PositionService {
                         final String comment = positionScanner.findElementByXpath(driver, xpathComment).getText();
                         String[] listOfElementsInTheFrame = comment.split("\n");
                         String lastElementOfTheFrame = listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1];
-                        if (lastElementOfTheFrame.matches("([0-9]*)кл([0-9]*)")
-                                || lastElementOfTheFrame.matches("([0-9]*(\\.))([0-9]*)кл([0-9]*)")
-                                || lastElementOfTheFrame.matches("\\*([0-9]*)кл([0-9]*)")
-                                || lastElementOfTheFrame.matches("\\*([0-9]*(\\.))([0-9]*)кл([0-9]*)")) {
+                        if (lastElementOfTheFrame.matches("([0-9]*)/([0-9]*)")
+                                || lastElementOfTheFrame.matches("([0-9]*(\\.))([0-9]*)/([0-9]*)")
+                                || lastElementOfTheFrame.matches("\\*([0-9]*)/([0-9]*)")
+                                || lastElementOfTheFrame.matches("\\*([0-9]*(\\.))([0-9]*)/([0-9]*)")) {
                             isSpecial = true;
                             specialGoal = lastElementOfTheFrame;
                             System.out.println(specialGoal);
                             String[] specials;
                             String[] split = specialGoal.split("[*]");
                             if (split.length > 1) {
-                                specials = split[1].split("кл");
+                                specials = split[1].split(KL);
                             } else {
-                                specials = lastElementOfTheFrame.split("кл");
+                                specials = lastElementOfTheFrame.split(KL);
                             }
                             System.out.println("Specials is" + Arrays.toString(specials));
                             specialProductPurchasePrise = (int) (Double.parseDouble(specials[0]) * 10);
