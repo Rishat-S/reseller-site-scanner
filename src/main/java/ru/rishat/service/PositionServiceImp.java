@@ -189,7 +189,7 @@ public class PositionServiceImp implements PositionService {
                             position.setProductAmount(productAmount);
                             logger.log(Level.INFO, "size is " + sizeOfProduct);
                             if (position.isBV()) {
-                                position.setProductSize(sizeOfProduct + " б/в");
+                                position.setProductSize(sizeOfProduct + " " + BV_POINTER);
                             } else {
                                 position.setProductSize(sizeOfProduct);
                             }
