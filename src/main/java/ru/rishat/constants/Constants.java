@@ -30,7 +30,17 @@ public final class Constants {
             "Получен",
             "Не найден"
     };
-    public static final String BV = "б/в";
-    public static final String KL = "/";
+    public static final int DEFAULT_PERCENT = 10;
+    public static final String BV_POINTER = "б/в";
+    public static final String DELIMITER_FOR_SPECIAL_CALCULATION = "/";
+    public static final String SEPARATOR_FOR_SPECIAL_CALCULATION = "[*]";
+    public static final String DELIMITER_FOR_TITLE = "/";
+    public static final String DELIMITER_FOR_RESELLER_ID = "№";
+    public static final String DELIMITER_FOR_AMOUNT = "шт";
+    public static final String DELIMITER_FOR_PRISE = "₽";
+    public static final String REGEX_FOR_DEFINING_CALC_METHOD = "([0-9]*)" + DELIMITER_FOR_SPECIAL_CALCULATION + "([0-9]*)";
+    public static final String REGEX_FOR_DEFINING_CALC_METHOD_WITH_DOT = "([0-9]*(\\.))([0-9]*)" + DELIMITER_FOR_SPECIAL_CALCULATION + "([0-9]*)";
+    public static final String REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK = "\\*([0-9]*)" + DELIMITER_FOR_SPECIAL_CALCULATION + "([0-9]*)";
+    public static final String REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK_WITH_DOT = "\\*([0-9]*(\\.))([0-9]*)" + DELIMITER_FOR_SPECIAL_CALCULATION + "([0-9]*)";
     public static List<String> DATA_FROM_FILE;
 }

@@ -51,8 +51,11 @@ public class PositionServiceImp implements PositionService {
                     System.out.println("Exit 1 " + numberOfCurrentElement + " - " + currentFrameElementsCount);
                     return;
                 }
-                //TODO: ERROR findElement
-                WebElement elementByXpath = positionScanner.findElementByXpath(driver, XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE);
+
+                WebElement elementByXpath = positionScanner.findElementByXpath(
+                        driver,
+                        XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE
+                );
                 positionScanner.scrollDownToElementByWebElement(driver, elementByXpath);
 
                 synchronized (driver) {
@@ -76,40 +79,40 @@ public class PositionServiceImp implements PositionService {
                         final String xpathPointOfSale = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE_OF_SELLER;
 
                         boolean isSpecial = false;
-                        String specialGoal = "";
-                        int percent = 10;
-                        boolean isBV = false;
+                        String specialCalculation = "";
+                        int percent = DEFAULT_PERCENT;
+                        boolean isBVPointer = false;
 
                         checkItIfTheFrameHasLoaded(driver, numberOfCurrentElement);
 
                         final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle)
-                                .getText().split("/");
+                                .getText().split(DELIMITER_FOR_TITLE);
                         logger.log(Level.INFO, "-->>> Title is <<<-- " + Arrays.toString(titleOfFrame));
                         final int positionID = Integer.parseInt(titleOfFrame[1]);
                         long resellerID = Long.parseLong(titleOfFrame[0]
-                                .split("№")[1]);
+                                .split(DELIMITER_FOR_RESELLER_ID)[1]);
 
-                        //TODO: configure resellers selection
-                        // switch ((int) resellerID) {
-                        // case 20:
-                        //    case 1:
-                        //    case 10: {
-                        //        System.out.println(resellerID);
-                        //        break;
-                        //    }
-                        //    default: {
-                        //        System.out.println("!!!---The reseller doesn't match. Skipped.");
-                        //        continue;
-                        //    }
-                        // }
+//                        TODO: configure resellers selection
+                        switch ((int) resellerID) {
+//                         case 20:
+//                            case 1:
+                            case 10: {
+                                System.out.println(resellerID);
+                                break;
+                            }
+                            default: {
+                                System.out.println("!!!---The reseller doesn't match. Skipped.");
+                                continue;
+                            }
+                        }
 
                         final String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
                                 .getText();
                         final String[] productPurchasePriseData = positionScanner.findElementByXpath(driver, xpathSum)
-                                .getText().split("₽");
+                                .getText().split(DELIMITER_FOR_PRISE);
                         int productPurchasePrise = (int) Double.parseDouble(productPurchasePriseData[0]);
                         int specialProductPurchasePrise = productPurchasePrise;
-                        final String[] splitAmountData = productPurchasePriseData[1].split(" ")[2].split("шт");
+                        final String[] splitAmountData = productPurchasePriseData[1].split(" ")[2].split(DELIMITER_FOR_AMOUNT);
                         int productAmount = Integer.parseInt(splitAmountData[0]);
                         final String pointOfSale = positionScanner.findElementByXpath(driver, xpathPointOfSale)
                                 .getText();
@@ -118,35 +121,35 @@ public class PositionServiceImp implements PositionService {
                         final String comment = positionScanner.findElementByXpath(driver, xpathComment).getText();
                         String[] listOfElementsInTheFrame = comment.split("\n");
                         String lastElementOfTheFrame = listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1];
-                        if (lastElementOfTheFrame.matches("([0-9]*)/([0-9]*)")
-                                || lastElementOfTheFrame.matches("([0-9]*(\\.))([0-9]*)/([0-9]*)")
-                                || lastElementOfTheFrame.matches("\\*([0-9]*)/([0-9]*)")
-                                || lastElementOfTheFrame.matches("\\*([0-9]*(\\.))([0-9]*)/([0-9]*)")) {
+                        if (lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD)
+                                || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_WITH_DOT)
+                                || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK)
+                                || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK_WITH_DOT)) {
                             isSpecial = true;
-                            specialGoal = lastElementOfTheFrame;
-                            System.out.println(specialGoal);
+                            specialCalculation = lastElementOfTheFrame;
+                            System.out.println(specialCalculation);
                             String[] specials;
-                            String[] split = specialGoal.split("[*]");
+                            String[] split = specialCalculation.split(SEPARATOR_FOR_SPECIAL_CALCULATION);
                             if (split.length > 1) {
-                                specials = split[1].split(KL);
+                                specials = split[1].split(DELIMITER_FOR_SPECIAL_CALCULATION);
                             } else {
-                                specials = lastElementOfTheFrame.split(KL);
+                                specials = specialCalculation.split(DELIMITER_FOR_SPECIAL_CALCULATION);
                             }
                             System.out.println("Specials is" + Arrays.toString(specials));
                             specialProductPurchasePrise = (int) (Double.parseDouble(specials[0]) * 10);
                             percent = Integer.parseInt(specials[1]);
                             listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1] = "";
-                            if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 2].contains(BV)) {
-                                isBV = true;
+                            if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 2].contains(BV_POINTER)) {
+                                isBVPointer = true;
                             }
                         }
 
-                        if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1].contains(BV)) {
-                            isBV = true;
+                        if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1].contains(BV_POINTER)) {
+                            isBVPointer = true;
                         }
 
                         for (String elementOfFrame : listOfElementsInTheFrame) {
-                            if (elementOfFrame.equals(BV)) {
+                            if (elementOfFrame.equals(BV_POINTER)) {
                                 System.out.println("Skipped б/в line");
                                 continue;
                             }
@@ -157,9 +160,9 @@ public class PositionServiceImp implements PositionService {
 
                             System.out.println(elementOfFrame);
                             Position position = new Position();
-                            position.setBV(isBV);
+                            position.setBV(isBVPointer);
                             position.setSpecialTypeOfCalculation(isSpecial);
-                            position.setSpecialGoal(specialGoal);
+                            position.setSpecialGoal(specialCalculation);
                             position.setPositionID(positionID);
                             position.setResellerID(resellerID);
                             position.setResellerName(resellerName);

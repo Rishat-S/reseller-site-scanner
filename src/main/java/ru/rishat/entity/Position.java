@@ -1,9 +1,8 @@
 package ru.rishat.entity;
 
-import java.util.logging.Logger;
+import static ru.rishat.constants.Constants.DEFAULT_PERCENT;
 
-public class Position implements Comparable<Position>{
-    private static final Logger logger = Logger.getLogger(Position.class.getName());
+public class Position implements Comparable<Position> {
     private long purchaseID;
     private long positionID;
     private long resellerID;
@@ -14,8 +13,8 @@ public class Position implements Comparable<Position>{
     private int productPurchasePrice;
     private int SpecialProductPurchasePrice;
     private String photoURL;
-    private int percent = 10;
-    private int percentOfIntermediatePrice = 10;
+    private int percent = DEFAULT_PERCENT;
+    private int percentOfIntermediatePrice = DEFAULT_PERCENT;
     private String pointOfSale;
     private boolean isSpecialTypeOfCalculation = false;
     private boolean isBV = false;
@@ -187,7 +186,7 @@ public class Position implements Comparable<Position>{
 
     @Override
     public int compareTo(Position position) {
-        int compare = 0;
+        int compare;
         try {
             compare = this.getBuyersName().compareToIgnoreCase(position.getBuyersName());
         } catch (Exception e) {
