@@ -46,6 +46,6 @@ public final class Constants {
     public static final String REGEX_FOR_DEFINING_CALC_METHOD = "([0-9]*)" + DELIMITER_FOR_SPECIAL_CALCULATION + "([0-9]*)";
     public static final String REGEX_FOR_DEFINING_CALC_METHOD_WITH_DOT = "([0-9]*(\\.))([0-9]*)" + DELIMITER_FOR_SPECIAL_CALCULATION + "([0-9]*)";
     public static final String REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK = "\\*([0-9]*)" + DELIMITER_FOR_SPECIAL_CALCULATION + "([0-9]*)";
-    public static final String REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK_WITH_DOT = "\\*([0-9]*(\\.))([0-9]*)" + DELIMITER_FOR_SPECIAL_CALCULATION + "([0-9]*)";
+    public static final String REGEX_FOR_DEFINING_CALC_METHOD_WITH_COMMA = "([0-9]*(\\,))([0-9]*)" + DELIMITER_FOR_SPECIAL_CALCULATION + "([0-9]*)";
     public static List<String> DATA_FROM_FILE;
 }

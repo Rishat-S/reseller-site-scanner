@@ -13,7 +13,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,10 +56,12 @@ public class PositionRepositoryImp implements PositionRepository {
              FileOutputStream outputStream = new FileOutputStream(dataFile);
         ) {
             Sheet sheetAt = workbook.getSheetAt(0);
+
             Collections.sort(positions);
-            for (Position position : positions) {
-                savePositionToFile(workbook, sheetAt, position);
-            }
+            positions.stream()
+                    .sorted((position1, position2) -> (int) (position1.getResellerID() - position2.getResellerID()))
+                    .forEach(position -> savePositionToFile(workbook, sheetAt, position));
+
             workbook.write(outputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);

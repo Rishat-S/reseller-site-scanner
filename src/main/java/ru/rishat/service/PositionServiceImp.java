@@ -93,12 +93,12 @@ public class PositionServiceImp implements PositionService {
                                 .split(DELIMITER_FOR_RESELLER_ID)[1]);
 
                         // TODO: configure reseller selection
-                        if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
-                            System.out.println(resellerID);
-                        } else {
-                            System.out.println("!!!---The reseller doesn't match. Skipped.");
-                            continue;
-                        }
+//                        if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
+//                            System.out.println(resellerID);
+//                        } else {
+//                            System.out.println("!!!---The reseller doesn't match. Skipped.");
+//                            continue;
+//                        }
 
                         final String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
                                 .getText();
@@ -117,8 +117,8 @@ public class PositionServiceImp implements PositionService {
                         String lastElementOfTheFrame = listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1];
                         if (lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD)
                                 || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_WITH_DOT)
-                                || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK)
-                                || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK_WITH_DOT)) {
+//                                || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK)
+                                || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_WITH_COMMA)) {
                             isSpecial = true;
                             specialCalculation = lastElementOfTheFrame;
                             System.out.println(specialCalculation);
@@ -130,7 +130,7 @@ public class PositionServiceImp implements PositionService {
                                 specials = specialCalculation.split(DELIMITER_FOR_SPECIAL_CALCULATION);
                             }
                             System.out.println("Specials is" + Arrays.toString(specials));
-                            specialProductPurchasePrise = (int) (Double.parseDouble(specials[0]) * 10);
+                            specialProductPurchasePrise = (int) (Double.parseDouble(specials[0].replace(",",".")) * 10);
                             percent = Integer.parseInt(specials[1]);
                             listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1] = "";
                             if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 2].contains(BV_POINTER)) {
