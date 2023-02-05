@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class PositionScanner {
-    private static final Logger logger = Logger.getLogger(PositionScanner.class.getName());
-
     public WebElement findElementByTagName(WebDriver driver, String tagName) {
         return driver.findElement(By.tagName(tagName));
     }

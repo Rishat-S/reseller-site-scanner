@@ -34,7 +34,7 @@ public class PositionServiceImp implements PositionService {
             if (numberOfCurrentElement == 1) {
                 positionScanner.scrollDownToDeltaY(driver, 500);
             } else {
-                positionScanner.scrollDownToElementByXpath(driver, BOTTOM_TO_PAGE);
+                positionScanner.scrollDownToElementByXpath(driver, XPATH_BOTTOM_OF_THE_PAGE);
             }
             synchronized (driver) {
                 driver.wait(5000);
@@ -48,15 +48,15 @@ public class PositionServiceImp implements PositionService {
             currentFrameElementsCount = frameElements.size();
             for (int i = 0; i < 5; i++) {
                 if (numberOfCurrentElement > currentFrameElementsCount) {
-                    System.out.println("Exit 1 " + numberOfCurrentElement + " - " + currentFrameElementsCount);
+                    System.out.println("First exit " + numberOfCurrentElement + " - " + currentFrameElementsCount);
                     return;
                 }
 
-                WebElement elementByXpath = positionScanner.findElementByXpath(
+                WebElement titleOfCurrentPosition = positionScanner.findElementByXpath(
                         driver,
                         XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE
                 );
-                positionScanner.scrollDownToElementByWebElement(driver, elementByXpath);
+                positionScanner.scrollDownToElementByWebElement(driver, titleOfCurrentPosition);
 
                 synchronized (driver) {
                     driver.wait(2000);
@@ -67,7 +67,7 @@ public class PositionServiceImp implements PositionService {
                 try {
                     for (; numberOfCurrentElement < to; numberOfCurrentElement++) {
                         if (numberOfCurrentElement > currentFrameElementsCount) {
-                            System.out.println("Exit 2 " + numberOfCurrentElement + " - " + currentFrameElementsCount);
+                            System.out.println("Second exit " + numberOfCurrentElement + " - " + currentFrameElementsCount);
                             return;
                         }
                         logger.log(Level.INFO, ">>> Number of current element - " + numberOfCurrentElement);
@@ -92,18 +92,12 @@ public class PositionServiceImp implements PositionService {
                         long resellerID = Long.parseLong(titleOfFrame[0]
                                 .split(DELIMITER_FOR_RESELLER_ID)[1]);
 
-//                        TODO: configure resellers selection
-                        switch ((int) resellerID) {
-//                         case 20:
-//                            case 1:
-                            case 10: {
-                                System.out.println(resellerID);
-                                break;
-                            }
-                            default: {
-                                System.out.println("!!!---The reseller doesn't match. Skipped.");
-                                continue;
-                            }
+                        // TODO: configure reseller selection
+                        if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
+                            System.out.println(resellerID);
+                        } else {
+                            System.out.println("!!!---The reseller doesn't match. Skipped.");
+                            continue;
                         }
 
                         final String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
@@ -213,6 +207,7 @@ public class PositionServiceImp implements PositionService {
                 }
             }
         }
+
     }
 
     @Override
