@@ -6,8 +6,8 @@ import java.util.List;
 
 public final class Constants {
     public static final long PURCHASE_ID = 37146;
-    public static final String STATUS = "W";
-    public static final String LINE_OF_SELLER = "=НОС";
+    public static final String STATUS = "P";
+    public static final String LINE_OF_SELLER = "";
     public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/"
             + PURCHASE_ID
             + "/market?state=" + STATUS + "&place" + LINE_OF_SELLER;
