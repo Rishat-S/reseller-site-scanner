@@ -39,19 +39,16 @@ Sub Main()
   Dim numberOfFirstFilledRow As Integer
   Dim numberOfFilledRows As Integer
   Dim resellerName As String
-'  Dim rangeForFormat As String
   
   sourceSheet = ActiveSheet.Name
+  destinationSheet = "Бирки"
   resellerName = Sheets(sourceSheet).Cells(1, 2)
   
   If resellerName = "Вадим Аминов" Then
-    destinationSheet = "Бир_В"
     organizer = " руб. орг. Аминов"
   ElseIf resellerName = "Татьяна Дедюхина" Then
-    destinationSheet = "Бирки_Т"
     organizer = "/ орг. Дедюхина"
   ElseIf resellerName = "Лариса Машина" Then
-    destinationSheet = "Бирки"
     organizer = "/ орг. Дедюхина"
   Else
     MsgBox "Reseller is not match. Exit."
