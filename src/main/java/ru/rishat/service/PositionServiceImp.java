@@ -113,11 +113,17 @@ public class PositionServiceImp implements PositionService {
                         final String photoName = saveImageToFile(driver, xpathImage, String.valueOf(titleOfFrame[1]));
                         String sizeOfProduct = "";
                         final String comment = positionScanner.findElementByXpath(driver, xpathComment).getText();
-                        String[] listOfElementsInTheFrame = comment.split("\n");
+                        String[] listOfElementsInTheFrame;
+                        //TODO: other resellers 1
+                        if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
+                            listOfElementsInTheFrame = comment.split("\n");
+                        } else {
+                            listOfElementsInTheFrame = new String[1];
+                            listOfElementsInTheFrame[0] = comment;
+                        }
                         String lastElementOfTheFrame = listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1];
                         if (lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD)
                                 || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_WITH_DOT)
-//                                || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_STARTING_WITH_ASTERISK)
                                 || lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD_WITH_COMMA)) {
                             isSpecial = true;
                             specialCalculation = lastElementOfTheFrame;
@@ -160,7 +166,14 @@ public class PositionServiceImp implements PositionService {
                             position.setPositionID(positionID);
                             position.setResellerID(resellerID);
                             position.setResellerName(resellerName);
-                            final String[] elementsData = elementOfFrame.split(",");
+                            //TODO: others resellers 2
+                            String[] elementsData;
+                            if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
+                                elementsData = elementOfFrame.split(",");
+                            } else {
+                                elementsData = new String[1];
+                                elementsData[0] = elementOfFrame;
+                            }
                             if (!elementsData[0].isEmpty() && elementsData.length != 1) {
                                 sizeOfProduct = elementsData[0];
                             }
