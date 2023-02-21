@@ -13,8 +13,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +24,7 @@ import static ru.rishat.constants.Constants.RESOURCES_DATA_XLSX;
 
 public class PositionRepositoryImp implements PositionRepository {
     private static final Logger logger = Logger.getLogger(PositionRepositoryImp.class.getName());
-    private final Queue<Position> positions = new LinkedList<>();
+    private final List<Position> positions = new ArrayList<>();
 
     @Override
     public void saveImageToFile(InputStream in, String photoName) {
@@ -55,9 +56,12 @@ public class PositionRepositoryImp implements PositionRepository {
              FileOutputStream outputStream = new FileOutputStream(dataFile);
         ) {
             Sheet sheetAt = workbook.getSheetAt(0);
-            for (Position position : positions) {
-                savePositionToFile(workbook, sheetAt, position);
-            }
+
+            Collections.sort(positions);
+            positions.stream()
+                    .sorted((position1, position2) -> (int) (position1.getResellerID() - position2.getResellerID()))
+                    .forEach(position -> savePositionToFile(workbook, sheetAt, position));
+
             workbook.write(outputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);

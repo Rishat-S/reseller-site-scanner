@@ -29,7 +29,6 @@ End Sub
 
 Sub Main()
   MsgBox "Start label creator"
-  ' MsgBox ActiveSheet.UsedRange.Address
   
   Dim redemption As String
   Dim organizer As String
@@ -40,39 +39,36 @@ Sub Main()
   Dim numberOfFirstFilledRow As Integer
   Dim numberOfFilledRows As Integer
   Dim resellerName As String
-'  Dim rangeForFormat As String
   
   sourceSheet = ActiveSheet.Name
+  destinationSheet = "Бирки"
   resellerName = Sheets(sourceSheet).Cells(1, 2)
   
   If resellerName = "Вадим Аминов" Then
-    destinationSheet = "Бир_В"
-    organizer = " руб. орг. Вадим М."
+    organizer = " руб. орг. Аминов"
   ElseIf resellerName = "Татьяна Дедюхина" Then
-    destinationSheet = "Бирки_Т"
-    organizer = "/ орг. Татьяна Д."
+    organizer = "/ орг. Дедюхина"
   ElseIf resellerName = "Лариса Машина" Then
-    destinationSheet = "Бирки"
-    organizer = "/ орг. Татьяна Д."
+    organizer = "/ орг. Дедюхина"
   Else
     MsgBox "Reseller is not match. Exit."
     Exit Sub
   End If
-  
+
   redemption = Sheets(sourceSheet).Cells(1, 3)
   numberOfFilledRows = ActiveSheet.Cells(ActiveSheet.Rows.Count, 1).End(xlUp).Row - 1
   numberOfFirstFilledRow = 6
   numberOfColumn = 0
   firstRowOfLabel = 1
-  
+
   MsgBox "Закупка № " & redemption & " " & resellerName & " " & numberOfFilledRows - 3 & " Labels"
-  
+
   Sheets(destinationSheet).Cells.Clear
-  
+
   For i = numberOfFirstFilledRow To numberOfFilledRows
-  
+
     numberOfColumn = numberOfColumn + 2
-    
+
     With Sheets(destinationSheet).Cells(firstRowOfLabel, numberOfColumn)
       .Value2 = Sheets(sourceSheet).Cells(i, 1)
       .WrapText = True
@@ -81,7 +77,7 @@ Sub Main()
       .Borders(xlEdgeRight).Weight = xlMedium
       .Borders(xlEdgeBottom).Weight = xlHairline
     End With
-    
+
     If resellerName = "Вадим Аминов" Then
         With Sheets(destinationSheet).Cells(firstRowOfLabel + 1, numberOfColumn)
             .Value2 = Sheets(sourceSheet).Cells(i, 3) & " = " & Sheets(sourceSheet).Cells(i, 4) & organizer
@@ -110,7 +106,7 @@ Sub Main()
         MsgBox "Reseller is not match. Exit."
         Exit Sub
     End If
-    
+
     With Sheets(destinationSheet).Cells(firstRowOfLabel + 2, numberOfColumn)
       .Value2 = redemption & " Офис: " & Sheets(sourceSheet).Cells(i, 2)
       .Cells(firstRowOfLabel + 2, numberOfColumn).WrapText = True
@@ -118,14 +114,14 @@ Sub Main()
       .Borders(xlEdgeRight).Weight = xlMedium
       .Borders(xlEdgeBottom).Weight = xlMedium
     End With
-    
+
     If numberOfColumn = 6 Then
       numberOfColumn = 0
       firstRowOfLabel = firstRowOfLabel + 3
     End If
-    
+
   Next i
-  
+
   FormatTheBordersSizeOfLabel destinationSheet
 
 End Sub

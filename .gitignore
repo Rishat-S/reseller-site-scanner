@@ -5,6 +5,7 @@ target/
 *.xlsx
 *.xlsm
 *.txt
+*.png
 
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

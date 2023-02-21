@@ -1,21 +1,20 @@
 package ru.rishat.entity;
 
-import java.util.logging.Logger;
+import static ru.rishat.constants.Constants.DEFAULT_PERCENT;
 
-public class Position {
-    private static final Logger logger = Logger.getLogger(Position.class.getName());
+public class Position implements Comparable<Position> {
     private long purchaseID;
     private long positionID;
     private long resellerID;
     private String resellerName;
-    private String buyersName;
+    private String buyersName = "";
     private String productSize;
     private int productAmount;
     private int productPurchasePrice;
     private int SpecialProductPurchasePrice;
     private String photoURL;
-    private int percent = 10;
-    private int percentOfIntermediatePrice = 10;
+    private int percent = DEFAULT_PERCENT;
+    private int percentOfIntermediatePrice = DEFAULT_PERCENT;
     private String pointOfSale;
     private boolean isSpecialTypeOfCalculation = false;
     private boolean isBV = false;
@@ -183,5 +182,40 @@ public class Position {
 
     public double getPurchaseSum() {
         return this.productAmount * this.getProductPurchasePrice();
+    }
+
+    @Override
+    public int compareTo(Position position) {
+        int compare;
+        try {
+            compare = this.getBuyersName().compareToIgnoreCase(position.getBuyersName());
+        } catch (Exception e) {
+            System.out.println(position.toString());
+            System.out.println(this);
+            throw new RuntimeException(e);
+        }
+        return compare;
+    }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "purchaseID=" + purchaseID +
+                ", positionID=" + positionID +
+                ", resellerID=" + resellerID +
+                ", resellerName='" + resellerName + '\'' +
+                ", buyersName='" + buyersName + '\'' +
+                ", productSize='" + productSize + '\'' +
+                ", productAmount=" + productAmount +
+                ", productPurchasePrice=" + productPurchasePrice +
+                ", SpecialProductPurchasePrice=" + SpecialProductPurchasePrice +
+                ", photoURL='" + photoURL + '\'' +
+                ", percent=" + percent +
+                ", percentOfIntermediatePrice=" + percentOfIntermediatePrice +
+                ", pointOfSale='" + pointOfSale + '\'' +
+                ", isSpecialTypeOfCalculation=" + isSpecialTypeOfCalculation +
+                ", isBV=" + isBV +
+                ", specialGoal='" + specialGoal + '\'' +
+                '}';
     }
 }
