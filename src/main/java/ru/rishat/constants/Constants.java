@@ -23,7 +23,7 @@ public final class Constants {
     public static final String XPATH_BOTTOM_OF_THE_PAGE = "//div[@role='status']";
     public static final String PATH_IMAGES_PHOTO_OF_PURCHASE = "src/main/resources/images/" + PURCHASE_ID + "/";
     public static final String AUTH_CSV = "src/main/resources/auth.csv";
-    public static final String RESOURCES_DATA_XLSX = "src/main/resources/" + getDateAndTime() + PURCHASE_ID + ".xlsx";
+    public static final String RESOURCES_DATA_XLSX = "src/main/resources/data_multi.xlsx"; // + getDateAndTime() + PURCHASE_ID + ".xlsx";
     public static final String[] LIST_FOR_VALIDATION_DATA_CELL = {
             "Куплен",
             "Не выкуплен",
