@@ -71,12 +71,12 @@ public class PositionServiceImp implements PositionService {
                             return;
                         }
                         logger.log(Level.INFO, ">>> Number of current element - " + numberOfCurrentElement);
-                        final String xpathImage = XPATH_FRAME_ + numberOfCurrentElement + XPATH_IMAGE;
-                        final String xpathTitle = XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE;
-                        final String xpathReseller = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SELLER;
-                        final String xpathComment = XPATH_FRAME_ + numberOfCurrentElement + XPATH_COMMENT;
-                        final String xpathSum = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SUM;
-                        final String xpathPointOfSale = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE_OF_SELLER;
+                        String xpathImage = XPATH_FRAME_ + numberOfCurrentElement + XPATH_IMAGE;
+                        String xpathTitle = XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE;
+                        String xpathReseller = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SELLER;
+                        String xpathComment = XPATH_FRAME_ + numberOfCurrentElement + XPATH_COMMENT;
+                        String xpathSum = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SUM;
+                        String xpathPointOfSale = XPATH_FRAME_ + numberOfCurrentElement + XPATH_LINE_OF_SELLER;
 
                         boolean isSpecial = false;
                         String specialCalculation = "";
@@ -88,7 +88,7 @@ public class PositionServiceImp implements PositionService {
                         final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle)
                                 .getText().split(DELIMITER_FOR_TITLE);
                         logger.log(Level.INFO, "-->>> Title is <<<-- " + Arrays.toString(titleOfFrame));
-                        final int positionID = Integer.parseInt(titleOfFrame[1]);
+                        int positionID = Integer.parseInt(titleOfFrame[1]);
                         long resellerID = Long.parseLong(titleOfFrame[0]
                                 .split(DELIMITER_FOR_RESELLER_ID)[1]);
 
@@ -100,26 +100,24 @@ public class PositionServiceImp implements PositionService {
 //                            continue;
 //                        }
 
-                        final String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
+                        String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
                                 .getText();
-                        final String[] productPurchasePriseData = positionScanner.findElementByXpath(driver, xpathSum)
+                        String[] productPurchasePriseData = positionScanner.findElementByXpath(driver, xpathSum)
                                 .getText().split(DELIMITER_FOR_PRISE);
                         int productPurchasePrise = (int) Double.parseDouble(productPurchasePriseData[0]);
                         int specialProductPurchasePrise = productPurchasePrise;
-                        final String[] splitAmountData = productPurchasePriseData[1].split(" ")[2].split(DELIMITER_FOR_AMOUNT);
+                        String[] splitAmountData = productPurchasePriseData[1].split(" ")[2].split(DELIMITER_FOR_AMOUNT);
                         int productAmount = Integer.parseInt(splitAmountData[0]);
-                        final String pointOfSale = positionScanner.findElementByXpath(driver, xpathPointOfSale)
+                        String pointOfSale = positionScanner.findElementByXpath(driver, xpathPointOfSale)
                                 .getText();
                         final String photoName = saveImageToFile(driver, xpathImage, String.valueOf(titleOfFrame[1]));
                         String sizeOfProduct = "";
                         final String comment = positionScanner.findElementByXpath(driver, xpathComment).getText();
                         String[] listOfElementsInTheFrame;
-                        //TODO: other resellers 1
                         if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
                             listOfElementsInTheFrame = comment.split("\n");
                         } else {
-                            listOfElementsInTheFrame = new String[1];
-                            listOfElementsInTheFrame[0] = comment;
+                            listOfElementsInTheFrame = new String[]{comment};
                         }
                         String lastElementOfTheFrame = listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1];
                         if (lastElementOfTheFrame.matches(REGEX_FOR_DEFINING_CALC_METHOD)
@@ -136,7 +134,7 @@ public class PositionServiceImp implements PositionService {
                                 specials = specialCalculation.split(DELIMITER_FOR_SPECIAL_CALCULATION);
                             }
                             System.out.println("Specials is" + Arrays.toString(specials));
-                            specialProductPurchasePrise = (int) (Double.parseDouble(specials[0].replace(",",".")) * 10);
+                            specialProductPurchasePrise = (int) (Double.parseDouble(specials[0].replace(",", ".")) * 10);
                             percent = Integer.parseInt(specials[1]);
                             listOfElementsInTheFrame[listOfElementsInTheFrame.length - 1] = "";
                             if (listOfElementsInTheFrame[listOfElementsInTheFrame.length - 2].contains(BV_POINTER)) {
@@ -166,13 +164,11 @@ public class PositionServiceImp implements PositionService {
                             position.setPositionID(positionID);
                             position.setResellerID(resellerID);
                             position.setResellerName(resellerName);
-                            //TODO: others resellers 2
                             String[] elementsData;
                             if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
                                 elementsData = elementOfFrame.split(",");
                             } else {
-                                elementsData = new String[1];
-                                elementsData[0] = elementOfFrame;
+                                elementsData = new String[]{elementOfFrame};
                             }
                             if (!elementsData[0].isEmpty() && elementsData.length != 1) {
                                 sizeOfProduct = elementsData[0];
@@ -226,7 +222,7 @@ public class PositionServiceImp implements PositionService {
     @Override
     public String saveImageToFile(WebDriver driver, String xpathImage, String photoName) {
         PositionScanner.waitToVisibilityOfElementLocated(driver, xpathImage, 30);
-        final String pathname = PATH_IMAGES_PHOTO_OF_PURCHASE;
+        String pathname = PATH_IMAGES_PHOTO_OF_PURCHASE;
         String[] styles;
         do {
             WebElement image = positionScanner.findElementByXpath(driver, xpathImage);

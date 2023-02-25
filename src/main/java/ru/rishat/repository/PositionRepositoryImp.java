@@ -14,13 +14,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ru.rishat.constants.Constants.LIST_FOR_VALIDATION_DATA_CELL;
-import static ru.rishat.constants.Constants.RESOURCES_DATA_XLSX;
+import static ru.rishat.constants.Constants.*;
 
 public class PositionRepositoryImp implements PositionRepository {
     private static final Logger logger = Logger.getLogger(PositionRepositoryImp.class.getName());
@@ -55,12 +55,22 @@ public class PositionRepositoryImp implements PositionRepository {
              Workbook workbook = WorkbookFactory.create(inputStream);
              FileOutputStream outputStream = new FileOutputStream(dataFile);
         ) {
-            Sheet sheetAt = workbook.getSheetAt(0);
-
             Collections.sort(positions);
-            positions.stream()
-                    .sorted((position1, position2) -> (int) (position1.getResellerID() - position2.getResellerID()))
-                    .forEach(position -> savePositionToFile(workbook, sheetAt, position));
+            Sheet sheetAt;
+            for (Position position : positions) {
+                if (Arrays.asList(RESELLERS_ID_LIST).contains(position.getResellerID())) {
+                    if (position.getResellerID() == 10) {
+                        sheetAt = workbook.getSheetAt(0);
+                    } else if (position.getResellerID() == 1) {
+                        sheetAt = workbook.getSheetAt(1);
+                    } else {
+                        sheetAt = workbook.getSheetAt(2);
+                    }
+                } else {
+                    sheetAt = workbook.getSheetAt(3);
+                }
+                savePositionToFile(workbook, sheetAt, position);
+            }
 
             workbook.write(outputStream);
         } catch (IOException e) {
@@ -83,86 +93,88 @@ public class PositionRepositoryImp implements PositionRepository {
 
     private void newDataFileProvider(File dataFile) {
         try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook()) {
-            XSSFSheet xssfSheet = xssfWorkbook.createSheet("Robot");
-            xssfSheet.setDefaultRowHeightInPoints(100);
-            XSSFRow row = xssfSheet.createRow(0);
-            final CellStyle cellStyle = createCellStyleForHeader(xssfWorkbook);
+            for (int j = 0; j <= RESELLERS_ID_LIST.length; j++) {
+                XSSFSheet xssfSheet = xssfWorkbook.createSheet("Robot" + (j + 1));
+                xssfSheet.setDefaultRowHeightInPoints(100);
+                XSSFRow row = xssfSheet.createRow(0);
+                final CellStyle cellStyle = createCellStyleForHeader(xssfWorkbook);
 
-            for (int i = 0; i < 18; i++) {
-                XSSFCell cell = row.createCell(i);
-                cell.setCellStyle(cellStyle);
-                switch (i) {
-                    case 0: {
-                        cell.setCellValue("Статус");
-                        break;
-                    }
-                    case 1: {
-                        cell.setCellValue("%");
-                        break;
-                    }
-                    case 2: {
-                        xssfSheet.setColumnWidth(i, 5000);
-                        cell.setCellValue("Фото");
-                        break;
-                    }
-                    case 3: {
-                        cell.setCellValue("ФИО");
-                        break;
-                    }
-                    case 4: {
-                        cell.setCellValue("Размер");
-                        break;
-                    }
-                    case 5: {
-                        cell.setCellValue("арт.");
-                        break;
-                    }
-                    case 6: {
-                        cell.setCellValue("Кол-во");
-                        break;
-                    }
-                    case 7: {
-                        cell.setCellValue("Зак. цен");
-                        break;
-                    }
-                    case 8: {
-                        cell.setCellValue("Цена");
-                        break;
-                    }
-                    case 9: {
-                        cell.setCellValue("Цена с орг.");
-                        break;
-                    }
-                    case 10: {
-                        cell.setCellValue("Ц*К");
-                        break;
-                    }
-                    case 11: {
-                        cell.setCellValue("Зак. Ц*К");
-                        break;
-                    }
-                    case 12: {
-                        cell.setCellValue("Точка");
-                        break;
-                    }
-                    case 13: {
-                        cell.setCellValue("ID посредника");
-                        break;
-                    }
-                    case 14: {
-                        cell.setCellValue("ФИО посредника");
-                        break;
-                    }
-                    case 15: {
-                        cell.setCellValue("№ Закупки");
-                        break;
-                    }
-                    case 16: {
-                        cell.setCellValue("Офис");
-                        break;
-                    }
-                    case 17: {
-                        cell.setCellValue("ОВР");
+                for (int i = 0; i < 18; i++) {
+                    XSSFCell cell = row.createCell(i);
+                    cell.setCellStyle(cellStyle);
+                    switch (i) {
+                        case 0: {
+                            cell.setCellValue("Статус");
+                            break;
+                        }
+                        case 1: {
+                            cell.setCellValue("%");
+                            break;
+                        }
+                        case 2: {
+                            xssfSheet.setColumnWidth(i, 5000);
+                            cell.setCellValue("Фото");
+                            break;
+                        }
+                        case 3: {
+                            cell.setCellValue("ФИО");
+                            break;
+                        }
+                        case 4: {
+                            cell.setCellValue("Размер");
+                            break;
+                        }
+                        case 5: {
+                            cell.setCellValue("арт.");
+                            break;
+                        }
+                        case 6: {
+                            cell.setCellValue("Кол-во");
+                            break;
+                        }
+                        case 7: {
+                            cell.setCellValue("Зак. цен");
+                            break;
+                        }
+                        case 8: {
+                            cell.setCellValue("Цена");
+                            break;
+                        }
+                        case 9: {
+                            cell.setCellValue("Цена с орг.");
+                            break;
+                        }
+                        case 10: {
+                            cell.setCellValue("Ц*К");
+                            break;
+                        }
+                        case 11: {
+                            cell.setCellValue("Зак. Ц*К");
+                            break;
+                        }
+                        case 12: {
+                            cell.setCellValue("Точка");
+                            break;
+                        }
+                        case 13: {
+                            cell.setCellValue("ID посредника");
+                            break;
+                        }
+                        case 14: {
+                            cell.setCellValue("ФИО посредника");
+                            break;
+                        }
+                        case 15: {
+                            cell.setCellValue("№ Закупки");
+                            break;
+                        }
+                        case 16: {
+                            cell.setCellValue("Офис");
+                            break;
+                        }
+                        case 17: {
+                            cell.setCellValue("ОВР");
+                        }
                     }
                 }
             }

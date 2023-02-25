@@ -28,16 +28,21 @@ public class App {
         Instant start = Instant.now();
         final WebDriver driver = WebDriverConfig.getWebDriver();
         logger.log(Level.INFO, "Start program, try scan purchase - " + PURCHASE_ID);
-        driver.get(MARKET_STATE_PLACE);
-        GlobalVarConfig.initializingVariables(new File(AUTH_CSV));
-        userController.logInUser(driver, userController.getUser());
-
-        synchronized (driver) {
-            driver.wait(3000);
-        }
-
         try {
-            positionController.scanAllPositions(driver);
+            for (int i = 0; i < STATUS.length; i++) {
+                driver.get(MARKET_STATE_PLACE + STATUS[i] + LINE_OF_SELLER);
+                if (i == 0) {
+                    GlobalVarConfig.initializingVariables(new File(AUTH_CSV));
+                    userController.logInUser(driver, userController.getUser());
+                }
+
+                synchronized (driver) {
+                    driver.wait(3000);
+                }
+
+                positionController.scanAllPositions(driver);
+
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
