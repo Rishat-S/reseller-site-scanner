@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 public final class Constants {
-    public static final long PURCHASE_ID = 38161;
-    public static final String[] STATUS = new String[]{"O","P"};
+    public static final long PURCHASE_ID = 39040;
+    public static final String[] STATUS = new String[]{"W","P","O"};
     public static final String LINE_OF_SELLER = "&place";
     public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/"
             + PURCHASE_ID
