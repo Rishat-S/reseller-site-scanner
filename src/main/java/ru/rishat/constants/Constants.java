@@ -35,6 +35,7 @@ public final class Constants {
     public static final Long[] RESELLERS_ID_LIST = {
             10L,
             20L,
+            2L,
             1L
     };
     public static final int DEFAULT_PERCENT = 10;

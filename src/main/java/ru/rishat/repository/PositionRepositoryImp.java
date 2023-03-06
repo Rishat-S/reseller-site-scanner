@@ -63,11 +63,13 @@ public class PositionRepositoryImp implements PositionRepository {
                         sheetAt = workbook.getSheetAt(0);
                     } else if (position.getResellerID() == 1) {
                         sheetAt = workbook.getSheetAt(1);
-                    } else {
+                    } else if (position.getResellerID() == 2) {
                         sheetAt = workbook.getSheetAt(2);
+                    } else {
+                        sheetAt = workbook.getSheetAt(3);
                     }
                 } else {
-                    sheetAt = workbook.getSheetAt(3);
+                    sheetAt = workbook.getSheetAt(4);
                 }
                 savePositionToFile(workbook, sheetAt, position);
             }
