@@ -114,7 +114,7 @@ public class PositionServiceImp implements PositionService {
                         String sizeOfProduct = "";
                         final String comment = positionScanner.findElementByXpath(driver, xpathComment).getText();
                         String[] listOfElementsInTheFrame;
-                        if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
+                        if (resellersMap.containsKey(resellerID)) {
                             listOfElementsInTheFrame = comment.split("\n");
                         } else {
                             listOfElementsInTheFrame = new String[]{comment};
@@ -165,7 +165,7 @@ public class PositionServiceImp implements PositionService {
                             position.setResellerID(resellerID);
                             position.setResellerName(resellerName);
                             String[] elementsData;
-                            if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
+                            if (resellersMap.containsKey(resellerID)) {
                                 elementsData = elementOfFrame.split(",");
                             } else {
                                 elementsData = new String[]{elementOfFrame};
@@ -178,13 +178,27 @@ public class PositionServiceImp implements PositionService {
                             } else if (elementsData.length == 2) {
                                 logger.log(Level.INFO, "Buyer's name is " + elementsData[1].trim());
                                 position.setBuyersName(elementsData[1].trim());
-                            } else if (elementsData.length == 3) {
+                            } else {
                                 logger.log(Level.INFO, "Buyer's name is " + elementsData[2].trim());
                                 position.setBuyersName(elementsData[2].trim());
                                 try {
                                     productAmount = Integer.parseInt(elementsData[1].trim());
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
+                                }
+                                if (elementsData.length > 3) {
+                                    try {
+                                        String resellerIDStringFromElementsData = elementsData[3].trim();
+                                        Long newResellerIDFromElementsData = Long.parseLong(resellerIDStringFromElementsData);
+                                        String resellerNameByID = resellersMap.get(newResellerIDFromElementsData);
+                                        System.out.println("Change! Reseller ID is - " + newResellerIDFromElementsData);
+                                        position.setResellerID(newResellerIDFromElementsData);
+                                        System.out.println("Reseller Name is - " + resellerNameByID);
+                                        position.setResellerName(resellerNameByID);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
                                 }
                             }
 

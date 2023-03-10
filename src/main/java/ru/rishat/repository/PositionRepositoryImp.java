@@ -58,7 +58,7 @@ public class PositionRepositoryImp implements PositionRepository {
             Collections.sort(positions);
             Sheet sheetAt;
             for (Position position : positions) {
-                if (Arrays.asList(RESELLERS_ID_LIST).contains(position.getResellerID())) {
+                if (resellersMap.containsKey(position.getResellerID())) {
                     if (position.getResellerID() == 10) {
                         sheetAt = workbook.getSheetAt(0);
                     } else if (position.getResellerID() == 1) {
@@ -95,7 +95,7 @@ public class PositionRepositoryImp implements PositionRepository {
 
     private void newDataFileProvider(File dataFile) {
         try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook()) {
-            for (int j = 0; j <= RESELLERS_ID_LIST.length; j++) {
+            for (int j = 0; j <= resellersMap.size(); j++) {
                 XSSFSheet xssfSheet = xssfWorkbook.createSheet("Robot" + (j + 1));
                 xssfSheet.setDefaultRowHeightInPoints(100);
                 XSSFRow row = xssfSheet.createRow(0);
