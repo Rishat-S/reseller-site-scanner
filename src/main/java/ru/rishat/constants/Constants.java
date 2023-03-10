@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 public final class Constants {
-    public static final long PURCHASE_ID = 38161;
-    public static final String[] STATUS = new String[]{"O"}; //"W","P","O"
+    public static final long PURCHASE_ID = 39040;
+    public static final String[] STATUS = new String[]{"W", "P", "O"};
     public static final String LINE_OF_SELLER = "&place";
     public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/"
             + PURCHASE_ID
@@ -35,14 +35,6 @@ public final class Constants {
             "Получен",
             "Не найден"
     };
-
-//    public static final Long[] RESELLERS_ID_LIST = {
-//            10L,
-//            20L,
-//            2L,
-//            1L
-//    };
-
     public static Map<Long, String> resellersMap = ImmutableMap.of(
             1L, "Татьяна Дедюхина",
             2L, "Татьяна Дедюхина",
