@@ -64,7 +64,7 @@ public class PositionRepositoryImp implements PositionRepository {
                     } else if (position.getResellerID() == 1) {
                         sheetAt = workbook.getSheetAt(1);
                     } else if (position.getResellerID() == 2) {
-                        sheetAt = workbook.getSheetAt(2);
+                        sheetAt = workbook.getSheetAt(1);
                     } else {
                         sheetAt = workbook.getSheetAt(3);
                     }

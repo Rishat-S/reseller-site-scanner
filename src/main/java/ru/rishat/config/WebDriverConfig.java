@@ -2,10 +2,13 @@ package ru.rishat.config;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class WebDriverConfig {
     public static WebDriver getWebDriver() {
         System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
-        return new ChromeDriver();
+        final ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--remote-allow-origins=*");
+        return new ChromeDriver(chromeOptions);
     }
 }
