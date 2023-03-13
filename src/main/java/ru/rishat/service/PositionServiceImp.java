@@ -126,13 +126,7 @@ public class PositionServiceImp implements PositionService {
                             isSpecial = true;
                             specialCalculation = lastElementOfTheFrame;
                             System.out.println(specialCalculation);
-                            String[] specials;
-                            String[] split = specialCalculation.split(SEPARATOR_FOR_SPECIAL_CALCULATION);
-                            if (split.length > 1) {
-                                specials = split[1].split(DELIMITER_FOR_SPECIAL_CALCULATION);
-                            } else {
-                                specials = specialCalculation.split(DELIMITER_FOR_SPECIAL_CALCULATION);
-                            }
+                            String[] specials = specialCalculation.split(DELIMITER_FOR_SPECIAL_CALCULATION);
                             System.out.println("Specials is" + Arrays.toString(specials));
                             specialProductPurchasePrise = (int) (Double.parseDouble(specials[0].replace(",", ".")) * 10);
                             percent = Integer.parseInt(specials[1]);
