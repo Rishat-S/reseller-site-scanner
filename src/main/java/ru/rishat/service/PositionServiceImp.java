@@ -185,9 +185,9 @@ public class PositionServiceImp implements PositionService {
                                         String resellerIDStringFromElementsData = elementsData[3].trim();
                                         Long newResellerIDFromElementsData = Long.parseLong(resellerIDStringFromElementsData);
                                         String resellerNameByID = resellersMap.get(newResellerIDFromElementsData);
-                                        System.out.println("Change! Reseller ID is - " + newResellerIDFromElementsData);
+                                        System.out.println("Change! Reseller's ID is - " + newResellerIDFromElementsData);
                                         position.setResellerID(newResellerIDFromElementsData);
-                                        System.out.println("Reseller Name is - " + resellerNameByID);
+                                        System.out.println("Reseller's Name is - " + resellerNameByID);
                                         position.setResellerName(resellerNameByID);
                                     } catch (Exception e) {
                                         e.printStackTrace();

@@ -1,6 +1,8 @@
 photoOfPurchase/
 target/
 *.csv
+*.xlsx
+*.xls
 *.txt
 *.png
 
