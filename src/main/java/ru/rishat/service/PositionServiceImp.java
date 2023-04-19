@@ -92,14 +92,6 @@ public class PositionServiceImp implements PositionService {
                         long resellerID = Long.parseLong(titleOfFrame[0]
                                 .split(DELIMITER_FOR_RESELLER_ID)[1]);
 
-                        // TODO: configure reseller selection
-//                        if (Arrays.asList(RESELLERS_ID_LIST).contains(resellerID)) {
-//                            System.out.println(resellerID);
-//                        } else {
-//                            System.out.println("!!!---The reseller doesn't match. Skipped.");
-//                            continue;
-//                        }
-
                         String resellerName = positionScanner.findElementByXpath(driver, xpathReseller)
                                 .getText();
                         String[] productPurchasePriseData = positionScanner.findElementByXpath(driver, xpathSum)
@@ -157,7 +149,11 @@ public class PositionServiceImp implements PositionService {
                             position.setSpecialGoal(specialCalculation);
                             position.setPositionID(positionID);
                             position.setResellerID(resellerID);
-                            position.setResellerName(resellerName);
+                            if (resellerID == 2) {
+                                position.setResellerName(resellersMap.get(resellerID));
+                            } else {
+                                position.setResellerName(resellerName);
+                            }
                             String[] elementsData;
                             if (resellersMap.containsKey(resellerID)) {
                                 elementsData = elementOfFrame.split(",");
