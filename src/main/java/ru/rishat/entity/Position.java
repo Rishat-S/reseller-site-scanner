@@ -90,8 +90,7 @@ public class Position implements Comparable<Position> {
             double percentAmount = this.getPercent() * this.getSpecialProductPurchasePrice() / 100.;
             result = (long) (Math.ceil((this.getSpecialProductPurchasePrice() + percentAmount) / 10.) * 10);
         } else {
-            double percentAmount = this.getPercent() * this.getIntermediatePrice() / 100.;
-            result = (long) (Math.ceil(this.getIntermediatePrice() + percentAmount));
+            result = this.getIntermediatePrice();
         }
         return result;
     }

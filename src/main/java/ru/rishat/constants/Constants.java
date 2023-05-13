@@ -9,7 +9,7 @@ import java.util.Map;
 
 public final class Constants {
     public static final long PURCHASE_ID = 44009;
-    public static final String[] STATUS = new String[]{"P", "O"};
+    public static final String[] STATUS = new String[]{"W", "O"}; //W P O
     public static final String LINE_OF_SELLER = "&place";
     public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/"
             + PURCHASE_ID
@@ -42,7 +42,7 @@ public final class Constants {
             20L, "Лариса Машина"
     );
 
-    public static final int DEFAULT_PERCENT = 10;
+    public static final int DEFAULT_PERCENT = 30;
     public static final String BV_POINTER = "б/в";
     public static final String DELIMITER_FOR_SPECIAL_CALCULATION = "/";
     public static final String DELIMITER_FOR_TITLE = "/";
