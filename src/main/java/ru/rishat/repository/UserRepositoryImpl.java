@@ -8,7 +8,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUser() {
-        //TODO:
         String[] authData = DATA_FROM_FILE.get(0).split(",");
         return new User(authData[0], authData[1]);
     }

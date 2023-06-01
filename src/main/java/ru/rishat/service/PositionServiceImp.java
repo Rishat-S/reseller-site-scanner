@@ -8,10 +8,6 @@ import ru.rishat.repository.PositionRepository;
 import ru.rishat.repository.PositionRepositoryImp;
 import ru.rishat.scanner.PositionScanner;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -70,7 +66,6 @@ public class PositionServiceImp implements PositionService {
                             System.out.println("Second exit " + numberOfCurrentElement + " - " + currentFrameElementsCount);
                             return;
                         }
-                        logger.log(Level.INFO, ">>> Number of current element - " + numberOfCurrentElement);
                         String xpathImage = XPATH_FRAME_ + numberOfCurrentElement + XPATH_IMAGE;
                         String xpathTitle = XPATH_FRAME_ + numberOfCurrentElement + XPATH_TITLE;
                         String xpathReseller = XPATH_FRAME_ + numberOfCurrentElement + XPATH_SELLER;
@@ -87,7 +82,7 @@ public class PositionServiceImp implements PositionService {
 
                         final String[] titleOfFrame = positionScanner.findElementByXpath(driver, xpathTitle)
                                 .getText().split(DELIMITER_FOR_TITLE);
-                        logger.log(Level.INFO, "-->>> Title is <<<-- " + Arrays.toString(titleOfFrame));
+                        logger.info(Arrays.toString(titleOfFrame));
                         int positionID = Integer.parseInt(titleOfFrame[1]);
                         long resellerID = Long.parseLong(titleOfFrame[0]
                                 .split(DELIMITER_FOR_RESELLER_ID)[1]);
@@ -102,7 +97,7 @@ public class PositionServiceImp implements PositionService {
                         int productAmount = Integer.parseInt(splitAmountData[0]);
                         String pointOfSale = positionScanner.findElementByXpath(driver, xpathPointOfSale)
                                 .getText();
-                        final String photoName = saveImageToFile(driver, xpathImage, String.valueOf(titleOfFrame[1]));
+                        final String photoName = getPathOfImage(driver, xpathImage);
                         String sizeOfProduct = "";
                         final String comment = positionScanner.findElementByXpath(driver, xpathComment).getText();
                         String[] listOfElementsInTheFrame;
@@ -166,10 +161,8 @@ public class PositionServiceImp implements PositionService {
                             if (elementsData.length == 1) {
                                 position.setBuyersName(elementOfFrame);
                             } else if (elementsData.length == 2) {
-                                logger.log(Level.INFO, "Buyer's name is " + elementsData[1].trim());
                                 position.setBuyersName(elementsData[1].trim());
                             } else {
-                                logger.log(Level.INFO, "Buyer's name is " + elementsData[2].trim());
                                 position.setBuyersName(elementsData[2].trim());
                                 try {
                                     productAmount = Integer.parseInt(elementsData[1].trim());
@@ -192,9 +185,7 @@ public class PositionServiceImp implements PositionService {
                                 }
                             }
 
-                            logger.log(Level.INFO, "amount is " + productAmount);
                             position.setProductAmount(productAmount);
-                            logger.log(Level.INFO, "size is " + sizeOfProduct);
                             if (position.isBV()) {
                                 position.setProductSize(sizeOfProduct + " " + BV_POINTER);
                             } else {
@@ -213,10 +204,6 @@ public class PositionServiceImp implements PositionService {
 
                 } catch (NoSuchElementException e) {
                     e.printStackTrace();
-                    logger.log(Level.INFO,
-                            "<<<>>> Current element - " + numberOfCurrentElement + "\n <<<>>>"
-                                    + positionScanner.findElementByXpath(driver,
-                                    XPATH_FRAME_ + numberOfCurrentElement + "]").getText());
                 }
             }
         }
@@ -224,31 +211,16 @@ public class PositionServiceImp implements PositionService {
     }
 
     @Override
-    public String saveImageToFile(WebDriver driver, String xpathImage, String photoName) {
+    public String getPathOfImage(WebDriver driver, String xpathImage) {
         PositionScanner.waitToVisibilityOfElementLocated(driver, xpathImage, 30);
-        String pathname = PATH_IMAGES_PHOTO_OF_PURCHASE;
         String[] styles;
         do {
             WebElement image = positionScanner.findElementByXpath(driver, xpathImage);
             styles = image.getAttribute("style").split("\"");
-            logger.log(Level.INFO, "Style attribute length is " + styles.length);
-            System.out.println(Arrays.toString(styles));
         } while (styles.length != 3);
 
-        String uriOfPhoto = styles[1];
-        try (InputStream in = new URL(uriOfPhoto).openStream()) {
-            File pathToFolder = new File(pathname);
-            if (!pathToFolder.exists()) {
-                if (pathToFolder.mkdir()) {
-                    logger.log(Level.INFO, "The folder " + pathname + " does not exist and was created");
-                }
-            }
-            positionRepository.saveImageToFile(in, pathname + photoName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        return uriOfPhoto;
+        return styles[1];
     }
 
     private void checkItIfTheFrameHasLoaded(WebDriver driver, int numberOfCurrentElement) throws InterruptedException {

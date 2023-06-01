@@ -27,20 +27,8 @@ public class PositionRepositoryImp implements PositionRepository {
     private final List<Position> positions = new ArrayList<>();
 
     @Override
-    public void saveImageToFile(InputStream in, String photoName) {
-        try {
-            Files.copy(in, Paths.get(photoName + ".png"), StandardCopyOption.REPLACE_EXISTING);
-            logger.log(Level.INFO, "Photo " + photoName + ".png was saved");
-        } catch (IOException e) {
-            logger.log(Level.INFO, "Photo " + photoName + ".png don't saved");
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public void savePosition(Position position) {
         positions.add(position);
-        logger.log(Level.INFO, "-->> Position " + position.getPositionID() + " was saved to queue <<--");
     }
 
     @Override

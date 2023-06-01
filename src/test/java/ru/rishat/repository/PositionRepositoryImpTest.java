@@ -40,11 +40,11 @@ class PositionRepositoryImpTest {
     @Test
     public void saveImageToFile() {
         PositionServiceImp positionServiceImp = new PositionServiceImp();
-        positionServiceImp.saveImageToFile(driver, xpath, "!test");
+        positionServiceImp.getPathOfImage(driver, xpath);
     }
 
     @Test
-    void insertImageToCell() throws IOException {
+    void insertImageToCell() {
         Sheet sheet;
         try (Workbook workbook = new XSSFWorkbook();) {
             sheet = workbook.createSheet("Robot");
