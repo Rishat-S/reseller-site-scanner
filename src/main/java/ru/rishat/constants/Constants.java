@@ -22,7 +22,7 @@ public final class Constants {
     public static final String XPATH_SELLER = "]//div[contains(@class,'info-subtitle darken-light')]";
     public static final String XPATH_COMMENT = "]//div[contains(@class,'info-comment color-comment')]";
     public static final String XPATH_SUM = "]//div[@style='display: inline-block;']";
-    public static final String XPATH_LINE_OF_SELLER = "]//div[contains(@class,'font-weight-bold')]";
+    public static final String XPATH_LINE_OF_SELLER = "]//div[contains(@class, 'info-bottom darken')]//span[contains(@class, 'font-weight-bold')]";
     public static final String XPATH_BOTTOM_OF_THE_PAGE = "//div[@role='status']";
     public static final String PATH_IMAGES_PHOTO_OF_PURCHASE = "src/main/resources/images/" + PURCHASE_ID + "/";
     public static final String AUTH_CSV = "src/main/resources/auth.csv";
