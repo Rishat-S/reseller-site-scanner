@@ -2,13 +2,18 @@ package ru.rishat.constants;
 
 import com.google.common.collect.ImmutableMap;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class Constants {
-    public static final long PURCHASE_ID = 52475;
+    public static final long PURCHASE_ID = getPurchaseNumber();
+
     public static final String[] STATUS = new String[]{"P"}; //W P O
     public static final String LINE_OF_SELLER = "&place";
     public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/"
@@ -57,5 +62,17 @@ public final class Constants {
         Date dateNow = new Date();
         SimpleDateFormat formatForDateNow = new SimpleDateFormat("E-yyyy.MM.dd_hh-mm-ss_a_zzz_");
         return formatForDateNow.format(dateNow);
+    }
+
+    private static long getPurchaseNumber() {
+        final BufferedReader bufferedReader;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(AUTH_CSV));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        final List<String> authCollect = bufferedReader.lines().collect(Collectors.toList());
+
+        return Long.getLong(authCollect.get(2));
     }
 }
