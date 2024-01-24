@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 public final class Constants {
+<<<<<<< HEAD
     public static final long PURCHASE_ID = 60929;
+=======
+    public static final long PURCHASE_ID = 58666;
+>>>>>>> 1e6a8fc0606b032358b99ce7d10f63d09ce1f1b4
     public static final String[] STATUS = new String[]{"P"}; //W P O
     public static final String LINE_OF_SELLER = "&place";
     public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/"
