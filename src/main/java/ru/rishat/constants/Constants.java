@@ -9,13 +9,15 @@ import java.util.Map;
 
 public final class Constants {
 
-    public static final long PURCHASE_ID = 78725;
+    public static final long PURCHASE_ID = 109197;
+            ;
 
     public static final String[] STATUS = new String[]{"P"}; //W P O
     public static final String LINE_OF_SELLER = "&place";
     public static final String MARKET_STATE_PLACE = "https://dedyuhina.posred.pro/purchases/"
             + PURCHASE_ID
             + "/market?state=";
+    public static final String XPATH_BUTTON_ODNOKLASSNIKI = "/html/body/div[1]/div/main/div/div/div/div/div/div[2]/button";
     public static final String XPATH_BUTTON_OK = "//input[contains(@class,'button-pro')]";
     public static final String XPATH_FRAME = "//div[contains(@class,'pa-2')]";
     public static final String XPATH_FRAME_ = "//div[contains(@class,'pa-2')][";
@@ -25,7 +27,7 @@ public final class Constants {
     public static final String XPATH_COMMENT = "]//div[contains(@class,'info-comment color-comment')]";
     public static final String XPATH_SUM = "]//div[@style='display: inline-block;']";
     public static final String XPATH_LINE_OF_SELLER = "]//div[contains(@class, 'info-bottom darken')]//span[contains(@class, 'font-weight-bold')]";
-    public static final String XPATH_BOTTOM_OF_THE_PAGE = "//div[@role='status']";
+    public static final String XPATH_BOTTOM_OF_THE_PAGE = "//div[@aria-atomic='false']"; // "//div[@role='status']";
     public static final String AUTH_CSV = "src/main/resources/auth.csv";
     public static final String RESOURCES_DATA_XLSX = "src/main/resources/" + getDateAndTime() + PURCHASE_ID + ".xlsx";
     public static final String[] LIST_FOR_VALIDATION_DATA_CELL = {
