@@ -22,6 +22,7 @@ public class PositionScanner {
     }
 
     public WebElement findElementByXpath(WebDriver driver, String xpath) {
+        System.out.println(xpath);
         return driver.findElement(By.xpath(xpath));
     }
 

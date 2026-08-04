@@ -8,6 +8,7 @@ public class WebDriverConfig {
     public static WebDriver getWebDriver() {
         final ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--remote-allow-origins=*");
+        chromeOptions.setBinary("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\brave.exe");
         return new ChromeDriver(chromeOptions);
     }
 }
