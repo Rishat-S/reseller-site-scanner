@@ -214,6 +214,13 @@ public class PositionServiceImp implements PositionService {
         PositionScanner.waitToVisibilityOfElementLocated(driver, xpathImage, 30);
         String[] styles;
         do {
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
             WebElement image = positionScanner.findElementByXpath(driver, xpathImage);
             styles = image.getAttribute("style").split("\"");
         } while (styles.length != 3);

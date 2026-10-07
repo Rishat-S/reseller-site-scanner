@@ -7,8 +7,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 public class WebDriverConfig {
     public static WebDriver getWebDriver() {
         final ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--remote-allow-origins=*");
-        chromeOptions.setBinary("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\brave.exe");
+        // chromeOptions.addArguments("--remote-allow-origins=*");
+        // chromeOptions.setBinary("C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe");
+        chromeOptions.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
         return new ChromeDriver(chromeOptions);
     }
 }
